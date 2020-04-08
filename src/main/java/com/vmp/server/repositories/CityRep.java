@@ -1,6 +1,6 @@
 package com.vmp.server.repositories;
 
-import com.vmp.server.entities.VMPUserEntity;
+import com.vmp.server.entities.CityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface VMPUserRep extends JpaRepository<VMPUserEntity, Integer> {
+public interface CityRep extends JpaRepository<CityEntity, Integer> {
 
     @Override
-    List<VMPUserEntity> findAll();
+    List<CityEntity> findAll();
 
-    Optional<VMPUserEntity> findByLogin(String login);
-
+    Optional<CityEntity> findById(Integer id);
 }

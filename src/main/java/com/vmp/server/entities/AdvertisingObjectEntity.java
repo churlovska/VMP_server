@@ -19,34 +19,34 @@ public class AdvertisingObjectEntity {
     @Column(name="address", nullable = false, length = 100)
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id")
     private CityEntity city_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mi_id")
     private MedicalInstitutionEntity mi_id;
 
     @Column(name="reservation_status", nullable = false)
     private Boolean reservation_status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "segment_id", nullable = false)
     private SegmentsEntity segment_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subsegment1_id")
     private SegmentsEntity subsegment1_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subsegment2_id")
     private SegmentsEntity subsegment2_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subsegment3_id")
     private SegmentsEntity subsegment3_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "placing_format_id", nullable = false)
     private FormatsEntity placing_format_id;
 
@@ -80,7 +80,7 @@ public class AdvertisingObjectEntity {
     @Column(name="pockets", nullable = false)
     private Integer pockets;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ao_type_id", nullable = false)
     private AOTypesEntity ao_type_id;
 

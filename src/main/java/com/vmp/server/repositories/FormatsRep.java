@@ -1,6 +1,6 @@
 package com.vmp.server.repositories;
 
-import com.vmp.server.entities.VMPUserEntity;
+import com.vmp.server.entities.FormatsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface VMPUserRep extends JpaRepository<VMPUserEntity, Integer> {
+public interface FormatsRep extends JpaRepository<FormatsEntity, Integer> {
 
     @Override
-    List<VMPUserEntity> findAll();
+    List<FormatsEntity> findAll();
 
-    Optional<VMPUserEntity> findByLogin(String login);
-
+    Optional<FormatsEntity> findById(Integer id);
 }

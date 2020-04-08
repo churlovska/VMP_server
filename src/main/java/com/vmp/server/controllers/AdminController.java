@@ -14,6 +14,8 @@ public class AdminController {
     public String userList() {
         return ("Hi, admin");
     }
+
+
 /*
     @PostMapping("/admin")
     public String  deleteUser(@RequestParam(required = true, defaultValue = "" ) Integer userId,
