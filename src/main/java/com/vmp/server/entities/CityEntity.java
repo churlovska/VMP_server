@@ -1,8 +1,7 @@
 package com.vmp.server.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "cities", schema = "public")
@@ -15,9 +14,6 @@ public class CityEntity {
 
     @Column(name = "city", length = 30, nullable = false)
     private String city;
-
-    public CityEntity() {
-    }
 
     public Integer getId() {
         return id;

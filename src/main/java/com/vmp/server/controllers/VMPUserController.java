@@ -6,27 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class VMPUserController {
-
-//    EntityManagerFactory emf = Persistence.createEntityManagerFactory(
-//            "jdbc:postgresql://localhost:5432/VMP;user=postgres;password=postgres");
-
-//    EntityManager em = emf.createEntityManager();
 
     @Autowired
     VMPUserRep vmpUserRep;
@@ -83,20 +71,19 @@ public class VMPUserController {
                                                   @Param(value = "segmentId") String segmentId,
                                                   @Param(value = "formatId") String formatId,
                                                   @Param(value = "contract") String contract) {
-
         return advertisingObjectRep.findAll((Specification<AdvertisingObjectEntity>) (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (aoTypeId != null) {
-                predicates.add(cb.equal(root.get("ao_type_id"), Integer.getInteger(aoTypeId)));
+                predicates.add(cb.equal(root.get("ao_type_id"), Integer.valueOf(aoTypeId)));
             }
             if (cityId != null) {
-                predicates.add(cb.equal(root.get("city_id"), Integer.getInteger(cityId)));
+                predicates.add(cb.equal(root.get("city_id"), Integer.valueOf(cityId)));
             }
             if (segmentId != null) {
-                predicates.add(cb.equal(root.get("segment_id"), Integer.getInteger(segmentId)));
+                predicates.add(cb.equal(root.get("segment_id"), Integer.valueOf(segmentId)));
             }
             if (formatId != null) {
-                predicates.add(cb.equal(root.get("format_id"), Integer.getInteger(formatId)));
+                predicates.add(cb.equal(root.get("placing_format_id"), Integer.valueOf(formatId)));
             }
             if (reservation != null) {
                 predicates.add(cb.equal(root.get("reservation_status"), Boolean.valueOf(reservation)));
