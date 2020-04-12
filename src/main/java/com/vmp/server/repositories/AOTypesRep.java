@@ -1,6 +1,6 @@
 package com.vmp.server.repositories;
 
-        import com.vmp.server.entities.AOTypesEntity;
+        import com.vmp.server.entities.MiTypesEntity;
         import org.springframework.data.jpa.repository.JpaRepository;
         import org.springframework.stereotype.Repository;
 
@@ -8,11 +8,10 @@ package com.vmp.server.repositories;
         import java.util.Optional;
 
 @Repository
-public interface AOTypesRep extends JpaRepository<AOTypesEntity, Integer> {
+public interface AOTypesRep extends JpaRepository<MiTypesEntity, Integer> {
 
-    @Override
-    List<AOTypesEntity> findAll();
+    List<MiTypesEntity> findAllOrOrderByType();
 
-    Optional<AOTypesEntity> findById(Integer id);
+    Optional<MiTypesEntity> findById(Integer id);
 
 }

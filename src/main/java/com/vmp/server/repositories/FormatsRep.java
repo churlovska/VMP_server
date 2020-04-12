@@ -10,8 +10,7 @@ import java.util.Optional;
 @Repository
 public interface FormatsRep extends JpaRepository<FormatsEntity, Integer> {
 
-    @Override
-    List<FormatsEntity> findAll();
+    List<FormatsEntity> findAllByOrderByFormat();
 
     Optional<FormatsEntity> findById(Integer id);
 }

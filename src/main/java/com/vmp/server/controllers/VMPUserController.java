@@ -34,47 +34,76 @@ public class VMPUserController {
     @Autowired
     FormatsRep formatsRep;
 
+    @Autowired
+    MiSocSignRep miSocSignRep;
+
     @GetMapping("/")
     public String home(){
         return("Home page");
     }
 
-    @GetMapping("/user")
-    public List<VMPUserEntity> greeting() {
-        return vmpUserRep.findAll();
+    @GetMapping("/show_users")
+    public List<VMPUserEntity> selectUsers() {
+        return vmpUserRep.findByOrderByLastnameAscFirstnameAscLoginAsc();
     }
 
     @GetMapping("/ao_list_types")
-    public List<AOTypesEntity> selectAOTypes() {
-        return aoTypesRep.findAll();
+    public List<MiTypesEntity> selectAOTypes() {
+        return aoTypesRep.findAllOrOrderByType();
     }
 
     @GetMapping("/ao_list_cities")
     public List<CityEntity> selectCities() {
-        return cityRep.findAll();
+        return cityRep.findAllByOrderByCityAsc();
     }
 
     @GetMapping("/ao_list_segments")
     public List<SegmentsEntity> selectSegments() {
-        return segmentsRep.findAll();
+        return segmentsRep.findAllByOrderBySegment();
     }
 
     @GetMapping("/ao_list_formats")
     public List<FormatsEntity> selectFormats() {
-        return formatsRep.findAll();
+        return formatsRep.findAllByOrderByFormat();
+    }
+
+    @GetMapping("/ao_list_significance")
+    public List<MiSocSignEntity> selectSignificance() {
+        return miSocSignRep.findAllByOrderBySignificance();
     }
 
     @GetMapping("/ao_list_result")
-    public List<AdvertisingObjectEntity> selectAO(@Param(value = "aoTypeId") String aoTypeId,
+    public List<AdvertisingObjectEntity> selectAO(@Param(value = "miTypeId") String miTypeId,
                                                   @Param(value = "cityId") String cityId,
                                                   @Param(value = "reservation") String reservation,
                                                   @Param(value = "segmentId") String segmentId,
                                                   @Param(value = "formatId") String formatId,
-                                                  @Param(value = "contract") String contract) {
+                                                  @Param(value = "contract") String contract,
+                                                  @Param(value = "floor") String floor,
+                                                  @Param(value = "neighbors") String neighbors,
+                                                  @Param(value = "pockets") String pockets,
+                                                  @Param(value = "socSign") String socSign,
+                                                  @Param(value = "placementPossibility") String placementPossibility) {
         return advertisingObjectRep.findAll((Specification<AdvertisingObjectEntity>) (root, query, cb) -> {
+
             List<Predicate> predicates = new ArrayList<>();
-            if (aoTypeId != null) {
-                predicates.add(cb.equal(root.get("ao_type_id"), Integer.valueOf(aoTypeId)));
+            if(placementPossibility != null) {
+                predicates.add(cb.equal(root.get("possibility_of_placement"), Boolean.valueOf(placementPossibility)));
+            }
+            if (socSign != null) {
+                predicates.add(cb.equal(root.get("mi_id"), Integer.valueOf(socSign)));
+            }
+            if (pockets != null) {
+                predicates.add(cb.equal(root.get("pockets"), Integer.valueOf(pockets)));
+            }
+            if (floor != null) {
+                predicates.add(cb.equal(root.get("floor"), Integer.valueOf(floor)));
+            }
+            if(neighbors != null) {
+                predicates.add(cb.equal(root.get("neighbors"), Boolean.valueOf(neighbors)));
+            }
+            if (miTypeId != null) {
+                predicates.add(cb.equal(root.get("mi_type_id"), Integer.valueOf(miTypeId)));
             }
             if (cityId != null) {
                 predicates.add(cb.equal(root.get("city_id"), Integer.valueOf(cityId)));
@@ -95,6 +124,8 @@ public class VMPUserController {
                     predicates.add(cb.isNull(root.get("contract")));
                 }
             }
+
+
             try {
                 Predicate predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
                 return predicate;

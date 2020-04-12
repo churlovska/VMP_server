@@ -10,8 +10,7 @@ import java.util.Optional;
 @Repository
 public interface VMPUserRep extends JpaRepository<VMPUserEntity, Integer> {
 
-    @Override
-    List<VMPUserEntity> findAll();
+    List<VMPUserEntity> findByOrderByLastnameAscFirstnameAscLoginAsc();
 
     Optional<VMPUserEntity> findByLogin(String login);
 

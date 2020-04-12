@@ -3,8 +3,8 @@ package com.vmp.server.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ao_types", schema = "public")
-public class AOTypesEntity {
+@Table(name = "mi_types", schema = "public")
+public class MiTypesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

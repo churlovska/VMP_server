@@ -1,7 +1,6 @@
 package com.vmp.server.entities;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.sql.Date;
 
 @Entity
@@ -25,7 +24,7 @@ public class AdvertisingObjectEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mi_id", referencedColumnName = "id")
-    private MedicalInstitutionEntity mi_id;
+    private MiSocSignEntity mi_id;
 
     @Column(name="reservation_status", nullable = false)
     private Boolean reservation_status;
@@ -81,8 +80,8 @@ public class AdvertisingObjectEntity {
     private Integer pockets;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ao_type_id", referencedColumnName = "id", nullable = false)
-    private AOTypesEntity ao_type_id;
+    @JoinColumn(name = "mi_type_id", referencedColumnName = "id", nullable = false)
+    private MiTypesEntity mi_type_id;
 
     @Column(name="possibility_of_placement", nullable = false)
     private Boolean possibility_of_placement;
@@ -125,11 +124,11 @@ public class AdvertisingObjectEntity {
         this.city_id = city_id;
     }
 
-    public MedicalInstitutionEntity getMi_id() {
+    public MiSocSignEntity getMi_id() {
         return mi_id;
     }
 
-    public void setMi_id(MedicalInstitutionEntity mi_id) {
+    public void setMi_id(MiSocSignEntity mi_id) {
         this.mi_id = mi_id;
     }
 
@@ -261,12 +260,12 @@ public class AdvertisingObjectEntity {
         this.pockets = pockets;
     }
 
-    public AOTypesEntity getAo_type_id() {
-        return ao_type_id;
+    public MiTypesEntity getMi_type_id() {
+        return mi_type_id;
     }
 
-    public void setAo_type_id(AOTypesEntity ao_type_id) {
-        this.ao_type_id = ao_type_id;
+    public void setMi_type_id(MiTypesEntity ao_type_id) {
+        this.mi_type_id = ao_type_id;
     }
 
     public Boolean getPossibility_of_placement() {
