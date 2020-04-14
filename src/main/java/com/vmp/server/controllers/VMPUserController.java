@@ -2,11 +2,12 @@ package com.vmp.server.controllers;
 
 import com.vmp.server.entities.*;
 import com.vmp.server.repositories.*;
+import com.vmp.server.service.AdvertisingObjectService;
+import com.vmp.server.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.Predicate;
@@ -37,6 +38,12 @@ public class VMPUserController {
     @Autowired
     MiSocSignRep miSocSignRep;
 
+    @Autowired
+    AdvertisingObjectService advertisingObjectService;
+
+    @Autowired
+    CityService cityService;
+
     @GetMapping("/")
     public String home(){
         return("Home page");
@@ -49,7 +56,7 @@ public class VMPUserController {
 
     @GetMapping("/ao_list_types")
     public List<MiTypesEntity> selectAOTypes() {
-        return aoTypesRep.findAllOrOrderByType();
+        return aoTypesRep.findAllByOrderByType();
     }
 
     @GetMapping("/ao_list_cities")
@@ -125,7 +132,6 @@ public class VMPUserController {
                 }
             }
 
-
             try {
                 Predicate predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
                 return predicate;
@@ -134,4 +140,32 @@ public class VMPUserController {
             }
         });
     }
+
+
+    @PostMapping(path = "/add_ao")
+    public void createAo(@RequestBody AdvertisingObjectEntity advertisingObjectEntity) {
+
+        if (advertisingObjectEntity != null) {
+            AdvertisingObjectEntity addedAO = advertisingObjectService.createAO(advertisingObjectEntity);
+
+            if (addedAO == null) {
+                System.out.println("AO not added");
+            } else {
+                System.out.println("AO added");
+            }
+        }
+    }
+
+    @PostMapping(path = "/add_city")
+    public void addCity(@RequestBody CityEntity cityEntity) {
+        if (cityEntity != null) {
+            cityService.createCity(cityEntity);
+        }
+    }
+
+    @PostMapping(path = "/add_user")
+    public void addUser(@RequestBody VMPUserEntity vmpUserEntity) {
+        vmpUserRep.save(vmpUserEntity);
+    }
+
 }

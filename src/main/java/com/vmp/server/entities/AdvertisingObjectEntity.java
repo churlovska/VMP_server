@@ -1,5 +1,7 @@
 package com.vmp.server.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -19,35 +21,63 @@ public class AdvertisingObjectEntity {
     private String address;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "city_id")
-    private CityEntity city_id;
+    @JoinColumn(name = "city_id", insertable = false, updatable = false)
+    private CityEntity cities;
+
+    @JsonIgnore
+    @Column
+    Integer city_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "mi_id", referencedColumnName = "id")
-    private MiSocSignEntity mi_id;
+    @JoinColumn(name = "mi_id", insertable = false, updatable = false)
+    private MiSocSignEntity mis;
+
+    @JsonIgnore
+    @Column
+    Integer mi_id;
 
     @Column(name="reservation_status", nullable = false)
     private Boolean reservation_status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "segment_id", referencedColumnName = "id", nullable = false)
-    private SegmentsEntity segment_id;
+    @JoinColumn(name = "segment_id", insertable = false, updatable = false, nullable = false)
+    private SegmentsEntity segments;
+
+    @JsonIgnore
+    @Column
+    Integer segment_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subsegment1_id", referencedColumnName = "id")
-    private SegmentsEntity subsegment1_id;
+    @JoinColumn(name = "subsegment1_id", insertable = false, updatable = false)
+    private SegmentsEntity subsegment1;
+
+    @JsonIgnore
+    @Column
+    Integer subsegment1_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subsegment2_id", referencedColumnName = "id")
-    private SegmentsEntity subsegment2_id;
+    @JoinColumn(name = "subsegment2_id", insertable = false, updatable = false)
+    private SegmentsEntity subsegment2;
+
+    @JsonIgnore
+    @Column
+    Integer subsegment2_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subsegment3_id", referencedColumnName = "id")
-    private SegmentsEntity subsegment3_id;
+    @JoinColumn(name = "subsegment3_id", insertable = false, updatable = false)
+    private SegmentsEntity subsegment3;
+
+    @JsonIgnore
+    @Column
+    Integer subsegment3_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "placing_format_id", referencedColumnName = "id", nullable = false)
-    private FormatsEntity placing_format_id;
+    @JoinColumn(name = "placing_format_id", insertable = false, updatable = false, nullable = false)
+    private FormatsEntity placing_format;
+
+    @JsonIgnore
+    @Column
+    Integer placing_format_id;
 
     @Column(name="floor", nullable = false)
     private Integer floor;
@@ -80,8 +110,12 @@ public class AdvertisingObjectEntity {
     private Integer pockets;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "mi_type_id", referencedColumnName = "id", nullable = false)
-    private MiTypesEntity mi_type_id;
+    @JoinColumn(name = "mi_type_id", insertable = false, updatable = false, nullable = false)
+    private MiTypesEntity mi_type;
+
+    @JsonIgnore
+    @Column
+    Integer mi_type_id;
 
     @Column(name="possibility_of_placement", nullable = false)
     private Boolean possibility_of_placement;
@@ -91,6 +125,40 @@ public class AdvertisingObjectEntity {
 
     @Column(name="photo", length = 500)
     private byte[] photo;
+
+    public AdvertisingObjectEntity() {
+    }
+
+/*    public AdvertisingObjectEntity(String name, String address, String city_id, String mi_id, String reservation, String segment_id,
+                                   String subs1, String subs2, String subs3, String format, String floor, String neighbors,
+                                   String place_description, String specialist_description, String contract, String price,
+                                   String date_from, String date_to, String comments, String pockets, String possibility_of_placement,
+                                   String client, String photo, String mi_type_id) {
+        this.name = name;
+        this.address = address;
+        this.city_id = cityRep.getOne(Integer.valueOf(city_id));
+        this.mi_id = miSocSignRep.getOne(Integer.valueOf(mi_id));
+        this.reservation_status = Boolean.valueOf(reservation);
+        this.segment_id = segmentsRep.getOne(Integer.valueOf(segment_id));
+        this.subsegment1_id = segmentsRep.getOne(Integer.valueOf(subs1));
+        this.subsegment2_id = segmentsRep.getOne(Integer.valueOf(subs2));
+        this.subsegment3_id = segmentsRep.getOne(Integer.valueOf(subs3));
+        this.placing_format_id = formatsRep.getOne(Integer.valueOf(format));
+        this.floor = Integer.valueOf(floor);
+        this.neighbors = Boolean.valueOf(neighbors);
+        this.place_description = place_description;
+        this.specialist_description = specialist_description;
+        this.contract = contract;
+        this.price = Double.valueOf(price);
+        this.date_from = Date.valueOf(date_from);
+        this.date_to = Date.valueOf(date_to);
+        this.comments = comments;
+        this.pockets = Integer.valueOf(pockets);
+        this.possibility_of_placement = Boolean.valueOf(possibility_of_placement);
+        this.client = client;
+        this.photo = photo.getBytes();
+        this.mi_type_id = aoTypesRep.getOne(Integer.valueOf(mi_type_id));
+    }*/
 
     public Integer getId() {
         return id;
@@ -116,68 +184,12 @@ public class AdvertisingObjectEntity {
         this.address = address;
     }
 
-    public CityEntity getCity_id() {
-        return city_id;
-    }
-
-    public void setCity_id(CityEntity city_id) {
-        this.city_id = city_id;
-    }
-
-    public MiSocSignEntity getMi_id() {
-        return mi_id;
-    }
-
-    public void setMi_id(MiSocSignEntity mi_id) {
-        this.mi_id = mi_id;
-    }
-
     public Boolean getReservation_status() {
         return reservation_status;
     }
 
     public void setReservation_status(Boolean reservation_status) {
         this.reservation_status = reservation_status;
-    }
-
-    public SegmentsEntity getSegment_id() {
-        return segment_id;
-    }
-
-    public void setSegment_id(SegmentsEntity segment_id) {
-        this.segment_id = segment_id;
-    }
-
-    public SegmentsEntity getSubsegment1_id() {
-        return subsegment1_id;
-    }
-
-    public void setSubsegment1_id(SegmentsEntity subsegment1_id) {
-        this.subsegment1_id = subsegment1_id;
-    }
-
-    public SegmentsEntity getSubsegment2_id() {
-        return subsegment2_id;
-    }
-
-    public void setSubsegment2_id(SegmentsEntity subsegment2_id) {
-        this.subsegment2_id = subsegment2_id;
-    }
-
-    public SegmentsEntity getSubsegment3_id() {
-        return subsegment3_id;
-    }
-
-    public void setSubsegment3_id(SegmentsEntity subsegment3_id) {
-        this.subsegment3_id = subsegment3_id;
-    }
-
-    public FormatsEntity getPlacing_format_id() {
-        return placing_format_id;
-    }
-
-    public void setPlacing_format_id(FormatsEntity placing_format_id) {
-        this.placing_format_id = placing_format_id;
     }
 
     public Integer getFloor() {
@@ -260,14 +272,6 @@ public class AdvertisingObjectEntity {
         this.pockets = pockets;
     }
 
-    public MiTypesEntity getMi_type_id() {
-        return mi_type_id;
-    }
-
-    public void setMi_type_id(MiTypesEntity ao_type_id) {
-        this.mi_type_id = ao_type_id;
-    }
-
     public Boolean getPossibility_of_placement() {
         return possibility_of_placement;
     }
@@ -290,5 +294,133 @@ public class AdvertisingObjectEntity {
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
+    }
+
+    public CityEntity getCities() {
+        return cities;
+    }
+
+    public void setCities(CityEntity cities) {
+        this.cities = cities;
+    }
+
+    public Integer getCity_id() {
+        return city_id;
+    }
+
+    public void setCity_id(Integer city_id) {
+        this.city_id = city_id;
+    }
+
+    public MiSocSignEntity getMis() {
+        return mis;
+    }
+
+    public void setMis(MiSocSignEntity mis) {
+        this.mis = mis;
+    }
+
+    public Integer getMi_id() {
+        return mi_id;
+    }
+
+    public void setMi_id(Integer mi_id) {
+        this.mi_id = mi_id;
+    }
+
+    public SegmentsEntity getSegments() {
+        return segments;
+    }
+
+    public void setSegments(SegmentsEntity segments) {
+        this.segments = segments;
+    }
+
+    public Integer getSegment_id() {
+        return segment_id;
+    }
+
+    public void setSegment_id(Integer segment_id) {
+        this.segment_id = segment_id;
+    }
+
+    public SegmentsEntity getSubsegment1() {
+        return subsegment1;
+    }
+
+    public void setSubsegment1(SegmentsEntity subsegment1) {
+        this.subsegment1 = subsegment1;
+    }
+
+    public Integer getSubsegment1_id() {
+        return subsegment1_id;
+    }
+
+    public void setSubsegment1_id(Integer subsegment1_id) {
+        this.subsegment1_id = subsegment1_id;
+    }
+
+    public SegmentsEntity getSubsegment2() {
+        return subsegment2;
+    }
+
+    public void setSubsegment2(SegmentsEntity subsegment2) {
+        this.subsegment2 = subsegment2;
+    }
+
+    public Integer getSubsegment2_id() {
+        return subsegment2_id;
+    }
+
+    public void setSubsegment2_id(Integer subsegment2_id) {
+        this.subsegment2_id = subsegment2_id;
+    }
+
+    public SegmentsEntity getSubsegment3() {
+        return subsegment3;
+    }
+
+    public void setSubsegment3(SegmentsEntity subsegment3) {
+        this.subsegment3 = subsegment3;
+    }
+
+    public Integer getSubsegment3_id() {
+        return subsegment3_id;
+    }
+
+    public void setSubsegment3_id(Integer subsegment3_id) {
+        this.subsegment3_id = subsegment3_id;
+    }
+
+    public FormatsEntity getPlacing_format() {
+        return placing_format;
+    }
+
+    public void setPlacing_format(FormatsEntity placing_format) {
+        this.placing_format = placing_format;
+    }
+
+    public Integer getPlacing_format_id() {
+        return placing_format_id;
+    }
+
+    public void setPlacing_format_id(Integer placing_format_id) {
+        this.placing_format_id = placing_format_id;
+    }
+
+    public MiTypesEntity getMi_type() {
+        return mi_type;
+    }
+
+    public void setMi_type(MiTypesEntity mi_type) {
+        this.mi_type = mi_type;
+    }
+
+    public Integer getMi_type_id() {
+        return mi_type_id;
+    }
+
+    public void setMi_type_id(Integer mi_type_id) {
+        this.mi_type_id = mi_type_id;
     }
 }

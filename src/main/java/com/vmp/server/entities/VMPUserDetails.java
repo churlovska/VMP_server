@@ -14,20 +14,15 @@ public class VMPUserDetails implements UserDetails {
 
     private String login;
     private String password;
-    private String lastname;
-    private String firstname;
-    private CityEntity city_id;
     private List<GrantedAuthority> authorities;
 
-    public VMPUserDetails(VMPUserEntity user) {
+
+       public VMPUserDetails(VMPUserEntity user) {
         this.login = user.getLogin();
         this.password = user.getPassword();
         this.authorities = Arrays.stream(user.getRole().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-        this.city_id = user.getCity_id();
-        this.lastname = user.getLastname();
-        this.firstname = user.getFirstname();
     }
 
     @Override

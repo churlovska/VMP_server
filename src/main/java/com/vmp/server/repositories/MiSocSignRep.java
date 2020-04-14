@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface MiSocSignRep  extends JpaRepository<MiSocSignEntity, Integer> {
-
     List<MiSocSignEntity> findAllByOrderBySignificance();
 }

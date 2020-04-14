@@ -1,5 +1,8 @@
 package com.vmp.server.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,16 +11,42 @@ public class VMPUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(value = "id")
     private Integer id;
+    @JsonProperty(value = "login")
     private String login;
+    @JsonProperty(value = "password")
     private String password;
+    @JsonProperty(value = "lastname")
     private String lastname;
+    @JsonProperty(value = "firstname")
     private String firstname;
+    @JsonProperty(value = "role")
     private String role;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "city_id")
-    private CityEntity city_id;
+    @JoinColumn(name = "city_id", insertable = false, updatable = false)
+    private CityEntity cities;
+
+    @JsonIgnore
+    @Column(name = "city_id")
+    private Integer city_id;
+
+    public void setCity_id(Integer city_id) {
+        this.city_id = city_id;
+    }
+
+    public Integer getCity_id() {
+        return city_id;
+    }
+
+    public CityEntity getCities() {
+        return cities;
+    }
+
+    public void setCities(CityEntity cities) {
+        this.cities = cities;
+    }
 
     public VMPUserEntity() {
     }
@@ -60,14 +89,6 @@ public class VMPUserEntity {
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
-    }
-
-    public CityEntity getCity_id() {
-        return city_id;
-    }
-
-    public void setCity_id(CityEntity city_id) {
-        this.city_id = city_id;
     }
 
     public String getRole() {

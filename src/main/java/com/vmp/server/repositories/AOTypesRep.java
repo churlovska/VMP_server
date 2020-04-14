@@ -10,8 +10,7 @@ package com.vmp.server.repositories;
 @Repository
 public interface AOTypesRep extends JpaRepository<MiTypesEntity, Integer> {
 
-    List<MiTypesEntity> findAllOrOrderByType();
+    List<MiTypesEntity> findAllByOrderByType();
 
     Optional<MiTypesEntity> findById(Integer id);
-
 }
