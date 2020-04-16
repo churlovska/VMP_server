@@ -2,12 +2,18 @@ package com.vmp.server.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vmp.server.repositories.CityRep;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "vmp_user", schema = "public")
 public class VMPUserEntity {
+
+    @Transient
+    @Autowired
+    CityRep cityRep;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +27,9 @@ public class VMPUserEntity {
     private String lastname;
     @JsonProperty(value = "firstname")
     private String firstname;
-    @JsonProperty(value = "role")
-    private String role;
+
+    @JsonIgnore
+    private Integer role_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id", insertable = false, updatable = false)
@@ -31,6 +38,10 @@ public class VMPUserEntity {
     @JsonIgnore
     @Column(name = "city_id")
     private Integer city_id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    private VMPRolesEntity roles;
 
     public void setCity_id(Integer city_id) {
         this.city_id = city_id;
@@ -49,6 +60,14 @@ public class VMPUserEntity {
     }
 
     public VMPUserEntity() {
+    }
+
+    public VMPUserEntity(String login, String password, String lastname, String firstname, Integer city_id) {
+        this.login = login;
+        this.password = password;
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.city_id = city_id;
     }
 
     public Integer getId() {
@@ -91,11 +110,19 @@ public class VMPUserEntity {
         this.firstname = firstname;
     }
 
-    public String getRole() {
-        return role;
+    public VMPRolesEntity getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(VMPRolesEntity roles) {
+        this.roles = roles;
+    }
+
+    public Integer getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(Integer role_id) {
+        this.role_id = role_id;
     }
 }

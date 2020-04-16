@@ -15,4 +15,6 @@ public interface VMPUserRep extends JpaRepository<VMPUserEntity, Integer>, CrudR
 
     Optional<VMPUserEntity> findByLogin(String login);
 
+    Boolean existsByLogin(String login);
+
 }
