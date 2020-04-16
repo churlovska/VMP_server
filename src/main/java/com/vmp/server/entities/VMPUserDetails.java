@@ -16,8 +16,7 @@ public class VMPUserDetails implements UserDetails {
     private String password;
     private List<GrantedAuthority> authorities;
 
-
-       public VMPUserDetails(VMPUserEntity user) {
+    public VMPUserDetails(VMPUserEntity user) {
         this.login = user.getLogin();
         this.password = user.getPassword();
         this.authorities = Arrays.stream(user.getRole().split(","))
