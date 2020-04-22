@@ -10,12 +10,12 @@ public class PreparedCommercialProposalEntity {
     @Column(name="id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "advertising_object")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "advertising_object", referencedColumnName = "id")
     private AdvertisingObjectEntity advertising_object;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "commercial_proposal_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "commercial_proposal_id", referencedColumnName = "id")
     private CommercialProposalEntity commercial_proposal_id;
 
     public Integer getId() {

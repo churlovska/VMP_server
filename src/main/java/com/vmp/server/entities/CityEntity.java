@@ -3,11 +3,12 @@ package com.vmp.server.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "cities", schema = "public")
 public class CityEntity {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

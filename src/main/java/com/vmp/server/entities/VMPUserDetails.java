@@ -4,14 +4,11 @@ package com.vmp.server.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class VMPUserDetails implements UserDetails {
 
@@ -22,11 +19,11 @@ public class VMPUserDetails implements UserDetails {
     private String password;
     private String lastname;
     private String firstname;
-    private Integer city_id;
+    private CityEntity city_id;
     private Collection<? extends GrantedAuthority> authorities;
 
 
-    public VMPUserDetails(String login, String password, String lastname, String firstname, Integer city_id,
+    public VMPUserDetails(String login, String password, String lastname, String firstname, CityEntity city_id,
                          Collection<? extends GrantedAuthority> authorities) {
         this.login = login;
         this.password = password;
@@ -46,7 +43,7 @@ public class VMPUserDetails implements UserDetails {
                 user.getPassword(),
                 user.getLastname(),
                 user.getFirstname(),
-                user.getCity_id(),
+                user.getCities(),
                 authorities);
     }
 
@@ -73,7 +70,7 @@ public class VMPUserDetails implements UserDetails {
         return firstname;
     }
 
-    public Integer getCity_id() {
+    public CityEntity getCity_id() {
         return city_id;
     }
 

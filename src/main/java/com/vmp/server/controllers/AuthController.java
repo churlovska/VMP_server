@@ -1,9 +1,14 @@
 package com.vmp.server.controllers;
 
 import com.vmp.server.config.jwt.JwtUtils;
+import com.vmp.server.repositories.CityRep;
+import com.vmp.server.request.LoginRequest;
+import com.vmp.server.request.SignupRequest;
 import com.vmp.server.entities.*;
 import com.vmp.server.repositories.VMPRolesRep;
 import com.vmp.server.repositories.VMPUserRep;
+import com.vmp.server.response.JwtResponse;
+import com.vmp.server.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,6 +42,9 @@ public class AuthController {
     PasswordEncoder encoder;
 
     @Autowired
+    CityRep cityRep;
+
+    @Autowired
     JwtUtils jwtUtils;
 
     @PostMapping("/signin")
@@ -57,7 +65,7 @@ public class AuthController {
                 userDetails.getUsername(),
                 userDetails.getLastname(),
                 userDetails.getFirstname(),
-                userDetails.getCity_id(),
+                userDetails.getCity_id().getId(),
                 roles));
     }
 
@@ -74,7 +82,7 @@ public class AuthController {
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getLastName(),
                 signUpRequest.getFirstName(),
-                signUpRequest.getCity_id());
+                cityRep.getOne(signUpRequest.getCity_id()));
 
         String strRoles = signUpRequest.getRole();
         Set<VMPRolesEntity> roles = new HashSet<>();
@@ -88,19 +96,19 @@ public class AuthController {
                     case "admin":
                         VMPRolesEntity adminRole = vmpRolesRep.findByRole(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        user.setRole_id(adminRole.getId());
+                        user.setRoles(adminRole);
 
                         break;
                     case "mod":
                         VMPRolesEntity modRole = vmpRolesRep.findByRole(ERole.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        user.setRole_id(modRole.getId());
+                        user.setRoles(modRole);
 
                         break;
                     default:
                         VMPRolesEntity userRole = vmpRolesRep.findByRole(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        user.setRole_id(userRole.getId());
+                        user.setRoles(userRole);
                 }
         }
 

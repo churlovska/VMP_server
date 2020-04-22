@@ -11,12 +11,12 @@ public class EstimateEntity {
     @Column(name="id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cp_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cp_id", referencedColumnName = "id")
     private CommercialProposalEntity cp_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_id", referencedColumnName = "id")
     private CommercialProposalEntity city_id;
 
     @Column(name="ao_count", nullable = false)

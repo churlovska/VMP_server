@@ -2,11 +2,15 @@ package com.vmp.server.controllers;
 
 import com.vmp.server.entities.*;
 import com.vmp.server.repositories.*;
+import com.vmp.server.request.AOResponse;
 import com.vmp.server.service.AdvertisingObjectService;
 import com.vmp.server.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
@@ -44,42 +48,43 @@ public class VMPUserController {
     @Autowired
     CityService cityService;
 
+
     @GetMapping("/")
     public String home(){
         return("Home page");
     }
 
-    @GetMapping("/show_users")
+    @GetMapping("/users")
     public List<VMPUserEntity> selectUsers() {
         return vmpUserRep.findByOrderByLastnameAscFirstnameAscLoginAsc();
     }
 
-    @GetMapping("/ao_list_types")
+    @GetMapping("/types")
     public List<MiTypesEntity> selectAOTypes() {
         return aoTypesRep.findAllByOrderByType();
     }
 
-    @GetMapping("/ao_list_cities")
+    @GetMapping("/cities")
     public List<CityEntity> selectCities() {
         return cityRep.findAllByOrderByCityAsc();
     }
 
-    @GetMapping("/ao_list_segments")
+    @GetMapping("/segments")
     public List<SegmentsEntity> selectSegments() {
         return segmentsRep.findAllByOrderBySegment();
     }
 
-    @GetMapping("/ao_list_formats")
+    @GetMapping("/formats")
     public List<FormatsEntity> selectFormats() {
         return formatsRep.findAllByOrderByFormat();
     }
 
-    @GetMapping("/ao_list_significance")
+    @GetMapping("/significance")
     public List<MiSocSignEntity> selectSignificance() {
         return miSocSignRep.findAllByOrderBySignificance();
     }
 
-    @GetMapping("/ao_list_result")
+    @GetMapping("/ao")
     public List<AdvertisingObjectEntity> selectAO(@Param(value = "miTypeId") String miTypeId,
                                                   @Param(value = "cityId") String cityId,
                                                   @Param(value = "reservation") String reservation,
@@ -142,11 +147,11 @@ public class VMPUserController {
     }
 
 
-    @PostMapping(path = "/add_ao")
-    public void createAo(@RequestBody AdvertisingObjectEntity advertisingObjectEntity) {
+    @PostMapping(path = "/ao")
+    public void createAo(@RequestBody AOResponse aoResponse) {
 
-        if (advertisingObjectEntity != null) {
-            AdvertisingObjectEntity addedAO = advertisingObjectService.createAO(advertisingObjectEntity);
+        if (aoResponse != null) {
+            AdvertisingObjectEntity addedAO = advertisingObjectService.createAO(aoResponse);
 
             if (addedAO == null) {
                 System.out.println("AO not added");
@@ -156,20 +161,22 @@ public class VMPUserController {
         }
     }
 
-
-
-
-
-    @PostMapping(path = "/add_city")
+    @PostMapping(path = "/city")
     public void addCity(@RequestBody CityEntity cityEntity) {
         if (cityEntity != null) {
             cityService.createCity(cityEntity);
         }
     }
 
-    @PostMapping(path = "/add_user")
-    public void addUser(@RequestBody VMPUserEntity vmpUserEntity) {
-        vmpUserRep.save(vmpUserEntity);
+    @DeleteMapping("/ao/{id}")
+    public ResponseEntity<Integer> deleteAO(@PathVariable Integer id) {
+
+        boolean isRemoved = advertisingObjectService.deleteAO(id);
+
+        if (!isRemoved) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
 }

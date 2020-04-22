@@ -1,6 +1,4 @@
-package com.vmp.server.entities;
-
-import java.util.Set;
+package com.vmp.server.request;
 
 public class SignupRequest {
     private String login;
@@ -8,7 +6,6 @@ public class SignupRequest {
     private String lastName;
     private String firstName;
     private Integer city_id;
-//    private Set<String> role;
     private String role;
 
     public SignupRequest() {
@@ -53,14 +50,6 @@ public class SignupRequest {
     public void setCity_id(Integer city_id) {
         this.city_id = city_id;
     }
-
-/*    public Set<String> getRole() {
-        return role;
-    }
-
-    public void setRole(Set<String> role) {
-        this.role = role;
-    }*/
 
     public String getRole() {
         return role;

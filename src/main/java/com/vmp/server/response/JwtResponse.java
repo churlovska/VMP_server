@@ -1,4 +1,4 @@
-package com.vmp.server.entities;
+package com.vmp.server.response;
 
 import java.util.List;
 

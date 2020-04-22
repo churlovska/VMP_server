@@ -1,6 +1,6 @@
 package com.vmp.server.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -20,64 +20,43 @@ public class AdvertisingObjectEntity {
     @Column(name="address", nullable = false, length = 100)
     private String address;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "city_id", insertable = false, updatable = false)
-    private CityEntity cities;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonProperty(value = "city_id")
+    @JoinColumn(name = "city_id", referencedColumnName = "id")
+    private CityEntity city;
 
-    @JsonIgnore
-    @Column
-    Integer city_id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "mi_id", insertable = false, updatable = false)
-    private MiSocSignEntity mis;
-
-    @JsonIgnore
-    @Column
-    Integer mi_id;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonProperty(value = "mi_id")
+    @JoinColumn(name = "mi_id", referencedColumnName = "id")
+    private MiSocSignEntity mi;
 
     @Column(name="reservation_status", nullable = false)
     private Boolean reservation_status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "segment_id", insertable = false, updatable = false, nullable = false)
-    private SegmentsEntity segments;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonProperty(value = "segment_id")
+    @JoinColumn(name = "segment_id", referencedColumnName = "id")
+    private SegmentsEntity segment;
 
-    @JsonIgnore
-    @Column
-    Integer segment_id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subsegment1_id", insertable = false, updatable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonProperty(value = "subsegment1_id")
+    @JoinColumn(name = "subsegment1_id", referencedColumnName = "id")
     private SegmentsEntity subsegment1;
 
-    @JsonIgnore
-    @Column
-    Integer subsegment1_id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subsegment2_id", insertable = false, updatable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonProperty(value = "subsegment2_id")
+    @JoinColumn(name = "subsegment2_id", referencedColumnName = "id")
     private SegmentsEntity subsegment2;
 
-    @JsonIgnore
-    @Column
-    Integer subsegment2_id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subsegment3_id", insertable = false, updatable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonProperty(value = "subsegment3_id")
+    @JoinColumn(name = "subsegment3_id", referencedColumnName = "id")
     private SegmentsEntity subsegment3;
 
-    @JsonIgnore
-    @Column
-    Integer subsegment3_id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "placing_format_id", insertable = false, updatable = false, nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonProperty(value = "placing_format_id")
+    @JoinColumn(name = "placing_format_id", referencedColumnName = "id")
     private FormatsEntity placing_format;
-
-    @JsonIgnore
-    @Column
-    Integer placing_format_id;
 
     @Column(name="floor", nullable = false)
     private Integer floor;
@@ -109,13 +88,10 @@ public class AdvertisingObjectEntity {
     @Column(name="pockets", nullable = false)
     private Integer pockets;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "mi_type_id", insertable = false, updatable = false, nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonProperty(value = "mi_type_id")
+    @JoinColumn(name = "mi_type_id", referencedColumnName = "id")
     private MiTypesEntity mi_type;
-
-    @JsonIgnore
-    @Column
-    Integer mi_type_id;
 
     @Column(name="possibility_of_placement", nullable = false)
     private Boolean possibility_of_placement;
@@ -126,8 +102,7 @@ public class AdvertisingObjectEntity {
     @Column(name="photo", length = 500)
     private byte[] photo;
 
-    public AdvertisingObjectEntity() {
-    }
+    public AdvertisingObjectEntity() {}
 
     public Integer getId() {
         return id;
@@ -153,12 +128,68 @@ public class AdvertisingObjectEntity {
         this.address = address;
     }
 
+    public CityEntity getCity() {
+        return city;
+    }
+
+    public void setCity(CityEntity city) {
+        this.city = city;
+    }
+
+    public MiSocSignEntity getMi() {
+        return mi;
+    }
+
+    public void setMi(MiSocSignEntity mi) {
+        this.mi = mi;
+    }
+
     public Boolean getReservation_status() {
         return reservation_status;
     }
 
     public void setReservation_status(Boolean reservation_status) {
         this.reservation_status = reservation_status;
+    }
+
+    public SegmentsEntity getSegment() {
+        return segment;
+    }
+
+    public void setSegment(SegmentsEntity segment) {
+        this.segment = segment;
+    }
+
+    public SegmentsEntity getSubsegment1() {
+        return subsegment1;
+    }
+
+    public void setSubsegment1(SegmentsEntity subsegment1) {
+        this.subsegment1 = subsegment1;
+    }
+
+    public SegmentsEntity getSubsegment2() {
+        return subsegment2;
+    }
+
+    public void setSubsegment2(SegmentsEntity subsegment2) {
+        this.subsegment2 = subsegment2;
+    }
+
+    public SegmentsEntity getSubsegment3() {
+        return subsegment3;
+    }
+
+    public void setSubsegment3(SegmentsEntity subsegment3) {
+        this.subsegment3 = subsegment3;
+    }
+
+    public FormatsEntity getPlacing_format() {
+        return placing_format;
+    }
+
+    public void setPlacing_format(FormatsEntity placing_format) {
+        this.placing_format = placing_format;
     }
 
     public Integer getFloor() {
@@ -241,6 +272,14 @@ public class AdvertisingObjectEntity {
         this.pockets = pockets;
     }
 
+    public MiTypesEntity getMi_type() {
+        return mi_type;
+    }
+
+    public void setMi_type(MiTypesEntity mi_type) {
+        this.mi_type = mi_type;
+    }
+
     public Boolean getPossibility_of_placement() {
         return possibility_of_placement;
     }
@@ -263,133 +302,5 @@ public class AdvertisingObjectEntity {
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
-    }
-
-    public CityEntity getCities() {
-        return cities;
-    }
-
-    public void setCities(CityEntity cities) {
-        this.cities = cities;
-    }
-
-    public Integer getCity_id() {
-        return city_id;
-    }
-
-    public void setCity_id(Integer city_id) {
-        this.city_id = city_id;
-    }
-
-    public MiSocSignEntity getMis() {
-        return mis;
-    }
-
-    public void setMis(MiSocSignEntity mis) {
-        this.mis = mis;
-    }
-
-    public Integer getMi_id() {
-        return mi_id;
-    }
-
-    public void setMi_id(Integer mi_id) {
-        this.mi_id = mi_id;
-    }
-
-    public SegmentsEntity getSegments() {
-        return segments;
-    }
-
-    public void setSegments(SegmentsEntity segments) {
-        this.segments = segments;
-    }
-
-    public Integer getSegment_id() {
-        return segment_id;
-    }
-
-    public void setSegment_id(Integer segment_id) {
-        this.segment_id = segment_id;
-    }
-
-    public SegmentsEntity getSubsegment1() {
-        return subsegment1;
-    }
-
-    public void setSubsegment1(SegmentsEntity subsegment1) {
-        this.subsegment1 = subsegment1;
-    }
-
-    public Integer getSubsegment1_id() {
-        return subsegment1_id;
-    }
-
-    public void setSubsegment1_id(Integer subsegment1_id) {
-        this.subsegment1_id = subsegment1_id;
-    }
-
-    public SegmentsEntity getSubsegment2() {
-        return subsegment2;
-    }
-
-    public void setSubsegment2(SegmentsEntity subsegment2) {
-        this.subsegment2 = subsegment2;
-    }
-
-    public Integer getSubsegment2_id() {
-        return subsegment2_id;
-    }
-
-    public void setSubsegment2_id(Integer subsegment2_id) {
-        this.subsegment2_id = subsegment2_id;
-    }
-
-    public SegmentsEntity getSubsegment3() {
-        return subsegment3;
-    }
-
-    public void setSubsegment3(SegmentsEntity subsegment3) {
-        this.subsegment3 = subsegment3;
-    }
-
-    public Integer getSubsegment3_id() {
-        return subsegment3_id;
-    }
-
-    public void setSubsegment3_id(Integer subsegment3_id) {
-        this.subsegment3_id = subsegment3_id;
-    }
-
-    public FormatsEntity getPlacing_format() {
-        return placing_format;
-    }
-
-    public void setPlacing_format(FormatsEntity placing_format) {
-        this.placing_format = placing_format;
-    }
-
-    public Integer getPlacing_format_id() {
-        return placing_format_id;
-    }
-
-    public void setPlacing_format_id(Integer placing_format_id) {
-        this.placing_format_id = placing_format_id;
-    }
-
-    public MiTypesEntity getMi_type() {
-        return mi_type;
-    }
-
-    public void setMi_type(MiTypesEntity mi_type) {
-        this.mi_type = mi_type;
-    }
-
-    public Integer getMi_type_id() {
-        return mi_type_id;
-    }
-
-    public void setMi_type_id(Integer mi_type_id) {
-        this.mi_type_id = mi_type_id;
     }
 }

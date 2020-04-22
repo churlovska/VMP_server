@@ -1,13 +1,12 @@
 package com.vmp.server.service;
 
 import com.vmp.server.entities.AdvertisingObjectEntity;
-import com.vmp.server.repositories.AdvertisingObjectRep;
+import com.vmp.server.repositories.*;
+import com.vmp.server.request.AOResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
+import javax.persistence.*;
 import javax.transaction.Transactional;
 
 @Service
@@ -15,26 +14,65 @@ public class AdvertisingObjectService {
 
     @Autowired
     AdvertisingObjectRep advertisingObjectRep;
+    @Autowired
+    CityRep cityRep;
+    @Autowired
+    MiSocSignRep miSocSignRep;
+    @Autowired
+    SegmentsRep segmentsRep;
+    @Autowired
+    FormatsRep formatsRep;
+    @Autowired
+    AOTypesRep aoTypesRep;
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager em;
 
-    public AdvertisingObjectEntity createAO(AdvertisingObjectEntity newAO) {
+    @Transactional
+    public AdvertisingObjectEntity createAO(AOResponse newAO) {
+
+        AdvertisingObjectEntity advertisingObjectEntity = new AdvertisingObjectEntity(
+                newAO.getName(), newAO.getAddress(), newAO.getReservation_status(), newAO.getFloor(),
+                newAO.getNeighbors(), newAO.getPlace_description(), newAO.getSpecialist_description(),
+                newAO.getContract(), newAO.getPrice(), newAO.getDate_from(), newAO.getDate_to(),
+                newAO.getComments(), newAO.getPockets(), newAO.getPossibility_of_placement(),
+                newAO.getClient(), newAO.getPhoto());
+
+        advertisingObjectEntity.setCity(cityRep.getOne(newAO.getCity_id()));
+        System.out.println(advertisingObjectEntity.getCity().getCity());
+        advertisingObjectEntity.setMi(miSocSignRep.getOne(newAO.getMi_id()));
+        advertisingObjectEntity.setSegment(segmentsRep.getOne(newAO.getSegment_id()));
+        advertisingObjectEntity.setSubsegment1(segmentsRep.getOne(newAO.getSubsegment1_id()));
+        advertisingObjectEntity.setSubsegment2(segmentsRep.getOne(newAO.getSubsegment2_id()));
+        advertisingObjectEntity.setSubsegment3(segmentsRep.getOne(newAO.getSubsegment3_id()));
+        advertisingObjectEntity.setPlacing_format(formatsRep.getOne(newAO.getPlacing_format_id()));
+        advertisingObjectEntity.setMi_type(aoTypesRep.getOne(newAO.getMi_type_id()));
 
         try {
-            advertisingObjectRep.save(newAO);
-            //insertWithEntityManager(newAO);
-            return newAO;
+            advertisingObjectRep.save(advertisingObjectEntity);
+            return advertisingObjectEntity;
         }
-        catch(PersistenceException ex) {
+        catch(Exception ex) {
             ex.printStackTrace();
             return null;
         }
+
+ //           em.persist(advertisingObjectEntity);
+ //           return advertisingObjectEntity;
     }
 
-    @Transactional
-    public void insertWithEntityManager(AdvertisingObjectEntity advertisingObjectEntity) {
-        this.entityManager.persist(advertisingObjectEntity);
-    }
+    public Boolean deleteAO (Integer id) {
+        try {
+            if (advertisingObjectRep.existsById(id)) {
+                advertisingObjectRep.deleteById(id);
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
 
+    }
 }

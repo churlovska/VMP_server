@@ -13,5 +13,6 @@ public interface AdvertisingObjectRep extends JpaRepository<AdvertisingObjectEnt
         PagingAndSortingRepository<AdvertisingObjectEntity, Integer>, QueryByExampleExecutor<AdvertisingObjectEntity>,
         CrudRepository<AdvertisingObjectEntity, Integer> {
 
-
+    @Override
+    void deleteById(Integer integer);
 }

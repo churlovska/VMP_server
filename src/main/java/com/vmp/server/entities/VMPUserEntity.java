@@ -1,19 +1,12 @@
 package com.vmp.server.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vmp.server.repositories.CityRep;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "vmp_user", schema = "public")
 public class VMPUserEntity {
-
-    @Transient
-    @Autowired
-    CityRep cityRep;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,28 +21,13 @@ public class VMPUserEntity {
     @JsonProperty(value = "firstname")
     private String firstname;
 
-    @JsonIgnore
-    private Integer role_id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "city_id", insertable = false, updatable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_id", referencedColumnName = "id")
     private CityEntity cities;
 
-    @JsonIgnore
-    @Column(name = "city_id")
-    private Integer city_id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     private VMPRolesEntity roles;
-
-    public void setCity_id(Integer city_id) {
-        this.city_id = city_id;
-    }
-
-    public Integer getCity_id() {
-        return city_id;
-    }
 
     public CityEntity getCities() {
         return cities;
@@ -62,12 +40,12 @@ public class VMPUserEntity {
     public VMPUserEntity() {
     }
 
-    public VMPUserEntity(String login, String password, String lastname, String firstname, Integer city_id) {
+    public VMPUserEntity(String login, String password, String lastname, String firstname, CityEntity city_id) {
         this.login = login;
         this.password = password;
         this.lastname = lastname;
         this.firstname = firstname;
-        this.city_id = city_id;
+        this.cities = city_id;
     }
 
     public Integer getId() {
@@ -116,13 +94,5 @@ public class VMPUserEntity {
 
     public void setRoles(VMPRolesEntity roles) {
         this.roles = roles;
-    }
-
-    public Integer getRole_id() {
-        return role_id;
-    }
-
-    public void setRole_id(Integer role_id) {
-        this.role_id = role_id;
     }
 }
