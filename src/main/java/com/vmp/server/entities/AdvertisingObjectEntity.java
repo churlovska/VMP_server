@@ -104,6 +104,28 @@ public class AdvertisingObjectEntity {
 
     public AdvertisingObjectEntity() {}
 
+    public AdvertisingObjectEntity(String name, String address, Boolean reservation_status,
+                                   Integer floor, Boolean neighbors, String place_description, String specialist_description, String contract,
+                                   Double price, Date date_from, Date date_to, String comments, Integer pockets, Boolean possibility_of_placement,
+                                   String client, byte[] photo) {
+        this.name = name;
+        this.address = address;
+        this.reservation_status = reservation_status;
+        this.floor = floor;
+        this.neighbors = neighbors;
+        this.place_description = place_description;
+        this.specialist_description = specialist_description;
+        this.contract = contract;
+        this.price = price;
+        this.date_from = date_from;
+        this.date_to = date_to;
+        this.comments = comments;
+        this.pockets = pockets;
+        this.possibility_of_placement = possibility_of_placement;
+        this.client = client;
+        this.photo = photo;
+    }
+
     public Integer getId() {
         return id;
     }

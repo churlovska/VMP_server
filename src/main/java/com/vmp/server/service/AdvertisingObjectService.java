@@ -56,9 +56,6 @@ public class AdvertisingObjectService {
             ex.printStackTrace();
             return null;
         }
-
- //           em.persist(advertisingObjectEntity);
- //           return advertisingObjectEntity;
     }
 
     public Boolean deleteAO (Integer id) {
