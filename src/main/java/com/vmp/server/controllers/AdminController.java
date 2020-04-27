@@ -14,6 +14,4 @@ public class AdminController {
     public String userList() {
         return ("Hi, admin");
     }
-
-
 }

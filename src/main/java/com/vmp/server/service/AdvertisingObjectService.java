@@ -29,7 +29,7 @@ public class AdvertisingObjectService {
     private EntityManager em;
 
     @Transactional
-    public AdvertisingObjectEntity createAO(AOResponse newAO) {
+    public boolean createAO(int id, AOResponse newAO) {
 
         AdvertisingObjectEntity advertisingObjectEntity = new AdvertisingObjectEntity(
                 newAO.getName(), newAO.getAddress(), newAO.getReservation_status(), newAO.getFloor(),
@@ -48,13 +48,17 @@ public class AdvertisingObjectService {
         advertisingObjectEntity.setPlacing_format(formatsRep.getOne(newAO.getPlacing_format_id()));
         advertisingObjectEntity.setMi_type(aoTypesRep.getOne(newAO.getMi_type_id()));
 
+        if (id != -1) {
+            advertisingObjectEntity.setId(id);
+        }
+
         try {
             advertisingObjectRep.save(advertisingObjectEntity);
-            return advertisingObjectEntity;
+            return true;
         }
         catch(Exception ex) {
             ex.printStackTrace();
-            return null;
+            return false;
         }
     }
 
