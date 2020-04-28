@@ -1,50 +1,35 @@
-package com.vmp.server.entities;
+package com.vmp.server.response;
 
-import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 
-@Entity
-@Table(name = "commercial_proposal", schema = "public")
-public class CommercialProposalEntity {
+public class CPResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
-
-    @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "client", nullable = false)
     private String client;
-
-    @Column(name = "brand", nullable = false)
     private String brand;
-
-    @Column(name = "date_from", nullable = false)
     private Date date_from;
-
-    @Column(name = "date_to", nullable = false)
     private Date date_to;
-
-    @Column(name = "creating_date", nullable = false)
     private Date creating_date;
-
-    @Column(name = "placing_format", nullable = false)
     private String placing_format;
-
-    @Column(name = "final_price", nullable = false)
     private Double final_price;
+    private ArrayList<Integer> advObjectsId;
+    private ArrayList<EstimateResponse> estimateList;
 
-    public CommercialProposalEntity() {
+    public CPResponse() {
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public CPResponse(String name, String client, String brand, Date date_from, Date date_to, Date creating_date, String placing_format, Double final_price, ArrayList<Integer> advObjectsId, ArrayList<EstimateResponse> estimateList) {
+        this.name = name;
+        this.client = client;
+        this.brand = brand;
+        this.date_from = date_from;
+        this.date_to = date_to;
+        this.creating_date = creating_date;
+        this.placing_format = placing_format;
+        this.final_price = final_price;
+        this.advObjectsId = advObjectsId;
+        this.estimateList = estimateList;
     }
 
     public String getName() {
@@ -109,5 +94,21 @@ public class CommercialProposalEntity {
 
     public void setFinal_price(Double final_price) {
         this.final_price = final_price;
+    }
+
+    public ArrayList<EstimateResponse> getEstimateList() {
+        return estimateList;
+    }
+
+    public void setEstimateList(ArrayList<EstimateResponse> estimateList) {
+        this.estimateList = estimateList;
+    }
+
+    public ArrayList<Integer> getAdvObjectsId() {
+        return advObjectsId;
+    }
+
+    public void setAdvObjectsId(ArrayList<Integer> advObjectsId) {
+        this.advObjectsId = advObjectsId;
     }
 }

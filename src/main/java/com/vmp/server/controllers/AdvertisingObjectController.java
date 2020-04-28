@@ -2,7 +2,7 @@ package com.vmp.server.controllers;
 
 import com.vmp.server.entities.AdvertisingObjectEntity;
 import com.vmp.server.repositories.AdvertisingObjectRep;
-import com.vmp.server.request.AOResponse;
+import com.vmp.server.response.AOResponse;
 import com.vmp.server.service.AdvertisingObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -144,4 +144,6 @@ public class AdvertisingObjectController {
             }
         });
     }
+
+
 }

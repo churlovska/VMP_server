@@ -1,68 +1,26 @@
-package com.vmp.server.entities;
+package com.vmp.server.response;
 
-import javax.persistence.*;
+public class EstimateResponse {
 
-@Entity
-@Table(name = "estimate", schema = "public")
-public class EstimateEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", nullable = false)
-    private Integer id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cp_id", referencedColumnName = "id")
-    private CommercialProposalEntity cp_id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "city_id", referencedColumnName = "id")
-    private CityEntity city_id;
-
-    @Column(name="ao_count", nullable = false)
+    private String city;
     private Integer ao_count;
-
-    @Column(name="price", nullable = false)
     private Double price;
-
-    @Column(name="duration", nullable = false)
     private Integer duration;
-
-    @Column(name="discount", length = 300)
     private String discount;
-
-    @Column(name="strategic_discount")
     private Double strategic_discount;
-
-    @Column(name="discount_price", nullable = false)
     private Double discount_price;
-
-    @Column(name="final_price", nullable = false)
     private Double final_price;
-
-    @Column(name="visits_traffic")
     private Integer visits_traffic;
-
-    @Column(name="ots_contacts")
     private Integer ots_contacts;
-
-    @Column(name="coverage_people")
     private Integer coverage_people;
-
-    @Column(name="cpt")
     private Double cpt;
-
-    @Column(name="price_poster_b1")
     private Double price_poster_b1;
 
-    public EstimateEntity() {
+    public EstimateResponse() {
     }
 
-    public EstimateEntity(CommercialProposalEntity cp_id, CityEntity city_id, Integer ao_count, Double price, Integer duration, String discount,
-                          Double strategic_discount, Double discount_price, Double final_price, Integer visits_traffic, Integer ots_contacts,
-                          Integer coverage_people, Double cpt, Double price_poster_b1) {
-        this.city_id = city_id;
-        this.cp_id = cp_id;
+    public EstimateResponse(String city, Integer ao_count, Double price, Integer duration, String discount, Double strategic_discount, Double discount_price, Double final_price, Integer visits_traffic, Integer ots_contacts, Integer coverage_people, Double cpt, Double price_poster_b1) {
+        this.city = city;
         this.ao_count = ao_count;
         this.price = price;
         this.duration = duration;
@@ -73,32 +31,16 @@ public class EstimateEntity {
         this.visits_traffic = visits_traffic;
         this.ots_contacts = ots_contacts;
         this.coverage_people = coverage_people;
-        this.price_poster_b1 = price_poster_b1;
         this.cpt = cpt;
+        this.price_poster_b1 = price_poster_b1;
     }
 
-    public Integer getId() {
-        return id;
+    public String getCity() {
+        return city;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public CommercialProposalEntity getCp_id() {
-        return cp_id;
-    }
-
-    public void setCp_id(CommercialProposalEntity cp_id) {
-        this.cp_id = cp_id;
-    }
-
-    public CityEntity getCity_id() {
-        return city_id;
-    }
-
-    public void setCity_id(CityEntity city_id) {
-        this.city_id = city_id;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public Integer getAo_count() {

@@ -21,6 +21,8 @@ public interface CityRep extends JpaRepository<CityEntity, Integer>, CrudReposit
 
     CityEntity getOne(Integer id);
 
+    CityEntity findByCity(String city);
+
     @Override
     <S extends CityEntity> S save(S s);
 }

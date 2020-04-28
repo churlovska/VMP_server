@@ -16,7 +16,15 @@ public class PreparedCommercialProposalEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "commercial_proposal_id", referencedColumnName = "id")
-    private CommercialProposalEntity commercial_proposal_id;
+    private CommercialProposalEntity commercial_proposal;
+
+    public PreparedCommercialProposalEntity() {
+    }
+
+    public PreparedCommercialProposalEntity(AdvertisingObjectEntity advertising_object, CommercialProposalEntity commercial_proposal) {
+        this.advertising_object = advertising_object;
+        this.commercial_proposal = commercial_proposal;
+    }
 
     public Integer getId() {
         return id;
@@ -34,11 +42,11 @@ public class PreparedCommercialProposalEntity {
         this.advertising_object = advertising_object;
     }
 
-    public CommercialProposalEntity getCommercial_proposal_id() {
-        return commercial_proposal_id;
+    public CommercialProposalEntity getCommercial_proposal() {
+        return commercial_proposal;
     }
 
-    public void setCommercial_proposal_id(CommercialProposalEntity commercial_proposal_id) {
-        this.commercial_proposal_id = commercial_proposal_id;
+    public void setCommercial_proposal(CommercialProposalEntity commercial_proposal_id) {
+        this.commercial_proposal = commercial_proposal_id;
     }
 }

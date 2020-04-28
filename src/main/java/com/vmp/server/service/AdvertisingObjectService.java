@@ -2,7 +2,7 @@ package com.vmp.server.service;
 
 import com.vmp.server.entities.AdvertisingObjectEntity;
 import com.vmp.server.repositories.*;
-import com.vmp.server.request.AOResponse;
+import com.vmp.server.response.AOResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +25,6 @@ public class AdvertisingObjectService {
     @Autowired
     AOTypesRep aoTypesRep;
 
-    @PersistenceContext
-    private EntityManager em;
-
     @Transactional
     public boolean createAO(int id, AOResponse newAO) {
 
@@ -39,7 +36,6 @@ public class AdvertisingObjectService {
                 newAO.getClient(), newAO.getPhoto());
 
         advertisingObjectEntity.setCity(cityRep.getOne(newAO.getCity_id()));
-        System.out.println(advertisingObjectEntity.getCity().getCity());
         advertisingObjectEntity.setMi(miSocSignRep.getOne(newAO.getMi_id()));
         advertisingObjectEntity.setSegment(segmentsRep.getOne(newAO.getSegment_id()));
         advertisingObjectEntity.setSubsegment1(segmentsRep.getOne(newAO.getSubsegment1_id()));
