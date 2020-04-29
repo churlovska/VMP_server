@@ -93,7 +93,7 @@ public class AdvertisingObjectController {
                 predicates.add(cb.equal(root.get("possibility_of_placement"), Boolean.valueOf(placementPossibility)));
             }
             if (socSign != null) {
-                predicates.add(cb.equal(root.get("mi_id"), Integer.valueOf(socSign)));
+                predicates.add(cb.equal(root.get("mi"), Integer.valueOf(socSign)));
             }
             if (pockets != null) {
                 predicates.add(cb.equal(root.get("pockets"), Integer.valueOf(pockets)));
@@ -105,25 +105,25 @@ public class AdvertisingObjectController {
                 predicates.add(cb.equal(root.get("neighbors"), Boolean.valueOf(neighbors)));
             }
             if (miTypeId != null) {
-                predicates.add(cb.equal(root.get("mi_type_id"), Integer.valueOf(miTypeId)));
+                predicates.add(cb.equal(root.get("mi_type"), Integer.valueOf(miTypeId)));
             }
             if (cityId != null) {
-                predicates.add(cb.equal(root.get("city_id"), Integer.valueOf(cityId)));
+                predicates.add(cb.equal(root.get("city"), Integer.valueOf(cityId)));
             }
             if (segmentId != null) {
-                predicates.add(cb.equal(root.get("segment_id"), Integer.valueOf(segmentId)));
+                predicates.add(cb.equal(root.get("segment"), Integer.valueOf(segmentId)));
             }
             if (segmentId1 != null) {
-                predicates.add(cb.equal(root.get("subsegment1_id"), Integer.valueOf(segmentId1)));
+                predicates.add(cb.equal(root.get("subsegment1"), Integer.valueOf(segmentId1)));
             }
             if (segmentId2 != null) {
-                predicates.add(cb.equal(root.get("subsegment2_id"), Integer.valueOf(segmentId2)));
+                predicates.add(cb.equal(root.get("subsegment2"), Integer.valueOf(segmentId2)));
             }
             if (segmentId3 != null) {
-                predicates.add(cb.equal(root.get("subsegment3_id"), Integer.valueOf(segmentId3)));
+                predicates.add(cb.equal(root.get("subsegment3"), Integer.valueOf(segmentId3)));
             }
             if (formatId != null) {
-                predicates.add(cb.equal(root.get("placing_format_id"), Integer.valueOf(formatId)));
+                predicates.add(cb.equal(root.get("placing_format"), Integer.valueOf(formatId)));
             }
             if (reservation != null) {
                 predicates.add(cb.equal(root.get("reservation_status"), Boolean.valueOf(reservation)));
