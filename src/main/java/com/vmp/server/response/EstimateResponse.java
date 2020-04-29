@@ -14,12 +14,11 @@ public class EstimateResponse {
     private Integer ots_contacts;
     private Integer coverage_people;
     private Double cpt;
-    private Double price_poster_b1;
 
     public EstimateResponse() {
     }
 
-    public EstimateResponse(String city, Integer ao_count, Double price, Integer duration, String discount, Double strategic_discount, Double discount_price, Double final_price, Integer visits_traffic, Integer ots_contacts, Integer coverage_people, Double cpt, Double price_poster_b1) {
+    public EstimateResponse(String city, Integer ao_count, Double price, Integer duration, String discount, Double strategic_discount, Double discount_price, Double final_price, Integer visits_traffic, Integer ots_contacts, Integer coverage_people, Double cpt) {
         this.city = city;
         this.ao_count = ao_count;
         this.price = price;
@@ -32,7 +31,6 @@ public class EstimateResponse {
         this.ots_contacts = ots_contacts;
         this.coverage_people = coverage_people;
         this.cpt = cpt;
-        this.price_poster_b1 = price_poster_b1;
     }
 
     public String getCity() {
@@ -129,13 +127,5 @@ public class EstimateResponse {
 
     public void setCpt(Double cpt) {
         this.cpt = cpt;
-    }
-
-    public Double getPrice_poster_b1() {
-        return price_poster_b1;
-    }
-
-    public void setPrice_poster_b1(Double price_poster_b1) {
-        this.price_poster_b1 = price_poster_b1;
     }
 }
