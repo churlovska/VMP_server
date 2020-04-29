@@ -20,12 +20,12 @@ public class AdvertisingObjectEntity {
     @Column(name="address", nullable = false, length = 100)
     private String address;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonProperty(value = "city_id")
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     private CityEntity city;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonProperty(value = "mi_id")
     @JoinColumn(name = "mi_id", referencedColumnName = "id")
     private MiSocSignEntity mi;
@@ -33,27 +33,27 @@ public class AdvertisingObjectEntity {
     @Column(name="reservation_status", nullable = false)
     private Boolean reservation_status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonProperty(value = "segment_id")
     @JoinColumn(name = "segment_id", referencedColumnName = "id")
     private SegmentsEntity segment;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonProperty(value = "subsegment1_id")
     @JoinColumn(name = "subsegment1_id", referencedColumnName = "id")
     private SegmentsEntity subsegment1;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonProperty(value = "subsegment2_id")
     @JoinColumn(name = "subsegment2_id", referencedColumnName = "id")
     private SegmentsEntity subsegment2;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonProperty(value = "subsegment3_id")
     @JoinColumn(name = "subsegment3_id", referencedColumnName = "id")
     private SegmentsEntity subsegment3;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonProperty(value = "placing_format_id")
     @JoinColumn(name = "placing_format_id", referencedColumnName = "id")
     private FormatsEntity placing_format;
@@ -88,7 +88,7 @@ public class AdvertisingObjectEntity {
     @Column(name="pockets", nullable = false)
     private Integer pockets;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonProperty(value = "mi_type_id")
     @JoinColumn(name = "mi_type_id", referencedColumnName = "id")
     private MiTypesEntity mi_type;

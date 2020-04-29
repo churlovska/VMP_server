@@ -11,11 +11,11 @@ public class EstimateEntity {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "cp_id", referencedColumnName = "id")
     private CommercialProposalEntity cp_id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     private CityEntity city_id;
 

@@ -2,12 +2,10 @@ package com.vmp.server.controllers;
 
 import com.vmp.server.response.CPResponse;
 import com.vmp.server.service.CommercialProposalService;
-import org.eclipse.jdt.internal.compiler.env.ISourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.w3c.dom.ls.LSOutput;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,7 +20,7 @@ public class CommercialProposalController {
     CommercialProposalService commercialProposalService;
 
     @PostMapping(path = "/cp")
-    public void createAo(@RequestBody CPResponse cpResponse, HttpServletResponse response) {
+    public void createCP(@RequestBody CPResponse cpResponse, HttpServletResponse response) {
 
         System.out.println("POST comm_proposal");
 

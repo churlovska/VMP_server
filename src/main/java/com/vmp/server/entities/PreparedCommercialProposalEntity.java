@@ -10,11 +10,11 @@ public class PreparedCommercialProposalEntity {
     @Column(name="id", nullable = false)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "advertising_object", referencedColumnName = "id")
     private AdvertisingObjectEntity advertising_object;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "commercial_proposal_id", referencedColumnName = "id")
     private CommercialProposalEntity commercial_proposal;
 

@@ -74,7 +74,7 @@ public class AuthController {
         if (vmpUserRep.existsByLogin(signUpRequest.getLogin())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new MessageResponse("Этот логин уже занят!"));
         }
 
         // Create new user's account
@@ -89,30 +89,30 @@ public class AuthController {
 
         if (strRoles == null) {
             VMPRolesEntity userRole = vmpRolesRep.findByRole(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    .orElseThrow(() -> new RuntimeException("Ошибка: роль не найдена."));
             roles.add(userRole);
         } else {
                 switch (strRoles) {
                     case "admin":
                         VMPRolesEntity adminRole = vmpRolesRep.findByRole(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException("Ошибка: роль не найдена."));
                         user.setRoles(adminRole);
 
                         break;
                     case "mod":
                         VMPRolesEntity modRole = vmpRolesRep.findByRole(ERole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException("Ошибка: роль не найдена."));
                         user.setRoles(modRole);
 
                         break;
                     default:
                         VMPRolesEntity userRole = vmpRolesRep.findByRole(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException("Ошибка: роль не найдена."));
                         user.setRoles(userRole);
                 }
         }
 
         vmpUserRep.save(user);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("Юзер успешно зарегистрирован!"));
     }
 }

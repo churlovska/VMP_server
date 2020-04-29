@@ -21,11 +21,11 @@ public class VMPUserEntity {
     @JsonProperty(value = "firstname")
     private String firstname;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     private CityEntity cities;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private VMPRolesEntity roles;
 
