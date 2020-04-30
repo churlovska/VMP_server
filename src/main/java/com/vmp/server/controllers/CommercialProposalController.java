@@ -1,9 +1,6 @@
 package com.vmp.server.controllers;
 
-import com.vmp.server.response.CPResponse;
-import com.vmp.server.response.EstimateCountResponse;
-import com.vmp.server.response.EstimateRequest;
-import com.vmp.server.response.EstimateResponse;
+import com.vmp.server.response.*;
 import com.vmp.server.service.CommercialProposalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,7 +63,7 @@ public class CommercialProposalController {
     }
 
     @PostMapping(path = "/cp_count/{b1_price}")
-    public ResponseEntity<EstimateCountResponse> countCP(@RequestBody ArrayList<EstimateRequest> estimateResponse,
+    public ResponseEntity<EstimateCountResponse> countCP(@RequestBody ArrayList<EstimateRequest> estimateRequests,
                                                          @PathVariable Double b1_price) {
 
         int ao_count_comm = 0;
@@ -79,7 +76,7 @@ public class CommercialProposalController {
         double price_fin;
         double price_vat_fin;
 
-        for (EstimateRequest o: estimateResponse) {
+        for (EstimateRequest o: estimateRequests) {
             ao_count_comm += o.getAo_count();
             price_comm += o.getFinal_price();
             traffic_comm += o.getVisits_traffic();
@@ -96,5 +93,18 @@ public class CommercialProposalController {
                 coverage_comm, cpt_comm, placement_fin, b1_price, price_fin, price_vat_fin);
 
         return new ResponseEntity<>(estimateCountResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/cp_count_discount")
+    public ResponseEntity<ArrayList<Double>> countCPDiscount(@RequestBody DiscountRequest discountRequest) {
+
+        ArrayList<Double> response = new ArrayList<>();
+        Double discPrice = discountRequest.getPrice()*(1-discountRequest.getDiscount())*(1-discountRequest.getStrDiscount());
+        Double finPrice = discPrice*discountRequest.getAoCount()*discountRequest.getDuration();
+
+        response.add(discPrice);
+        response.add(finPrice);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
