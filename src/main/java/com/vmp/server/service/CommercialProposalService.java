@@ -9,7 +9,6 @@ import com.vmp.server.response.CPResponse;
 import com.vmp.server.response.EstimateResponse;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -198,17 +195,23 @@ public class CommercialProposalService {
             rowInd++;
             row = sheet.createRow(rowInd);
 
-            fillEstimateRow(style, row, "Длительность размещения (мес.)", "Регион", "Количество рекламных поверхностей, шт.", "Скидка, объём + период", "Стратегическая скидка", "Стоимость размещения 1 рекламного носителя за 1 месяц после скидок, руб., без НДС", "Итого, бюджет, руб., без НДС", "Стоимость размещения 1 рекламного носителя за 1 месяц, руб., без НДС",
-                    "Трафик (посещения)",
-                    "OTS (контакты)", "Охват (люди)", "OPT (руб.)");
+            fillEstimateRow(style, row, "Регион", "Количество рекламных поверхностей, шт.","Стоимость размещения 1 рекламного носителя за 1 месяц, руб., без НДС",
+                    "Длительность размещения (мес.)","Скидка, объём + период", "Стратегическая скидка",
+                    "Стоимость размещения 1 рекламного носителя за 1 месяц после скидок, руб., без НДС","Итого, бюджет, руб., без НДС",
+                    "Трафик (посещения)", "OTS (контакты)", "Охват (люди)", "CPT (руб.)");
 
             for (EstimateResponse o: estimateResponses) {
                 rowInd++;
                 row = sheet.createRow(rowInd);
 
-                fillEstimateRow(style, row, o.getCity(), String.valueOf(o.getAo_count()), String.valueOf(o.getDuration()), o.getDiscount(), String.valueOf(o.getStrategic_discount()), String.valueOf(o.getDiscount_price()), String.valueOf(o.getFinal_price()), String.valueOf(o.getVisits_traffic()), String.valueOf(o.getOts_contacts()), String.valueOf(o.getCoverage_people()), String.valueOf(o.getCpt()), String.valueOf(o.getPrice())
-                );
+                fillEstimateRow(style, row, o.getCity(), String.valueOf(o.getAo_count()), String.valueOf(o.getPrice()),
+                        String.valueOf(o.getDuration()), o.getDiscount(), String.valueOf(o.getStrategic_discount()),
+                        String.valueOf(o.getDiscount_price()), String.valueOf(o.getFinal_price()), String.valueOf(o.getVisits_traffic()),
+                        String.valueOf(o.getOts_contacts()), String.valueOf(o.getCoverage_people()), String.valueOf(o.getCpt()));
             }
+
+            rowInd++;
+            row = sheet.createRow(rowInd);
 
             fillEstimateRow(style, row, "Итого", String.valueOf(newCP.getAo_count_comm()), "", "", "", "", "", String.valueOf(newCP.getPrice_comm()),
                     String.valueOf(newCP.getTraffic_comm()), String.valueOf(newCP.getOts_comm()), String.valueOf(newCP.getCoverage_comm()), String.valueOf(newCP.getCpt_comm()));

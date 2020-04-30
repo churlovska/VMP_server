@@ -1,4 +1,4 @@
-package com.vmp.server.request;
+package com.vmp.server.response;
 
 public class LoginRequest {
 

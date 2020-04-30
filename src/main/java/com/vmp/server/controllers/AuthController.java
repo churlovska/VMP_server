@@ -2,8 +2,8 @@ package com.vmp.server.controllers;
 
 import com.vmp.server.config.jwt.JwtUtils;
 import com.vmp.server.repositories.CityRep;
-import com.vmp.server.request.LoginRequest;
-import com.vmp.server.request.SignupRequest;
+import com.vmp.server.response.LoginRequest;
+import com.vmp.server.response.SignupRequest;
 import com.vmp.server.entities.*;
 import com.vmp.server.repositories.VMPRolesRep;
 import com.vmp.server.repositories.VMPUserRep;
