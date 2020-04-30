@@ -8,6 +8,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+
 @Repository
 public interface AdvertisingObjectRep extends JpaRepository<AdvertisingObjectEntity, Integer>, JpaSpecificationExecutor<AdvertisingObjectEntity>,
         PagingAndSortingRepository<AdvertisingObjectEntity, Integer>, QueryByExampleExecutor<AdvertisingObjectEntity>,
@@ -15,4 +17,6 @@ public interface AdvertisingObjectRep extends JpaRepository<AdvertisingObjectEnt
 
     @Override
     void deleteById(Integer integer);
+
+    ArrayList<AdvertisingObjectEntity> findByIdIn(ArrayList<Integer> ids);
 }

@@ -1,5 +1,7 @@
 package com.vmp.server.controllers;
 
+import com.vmp.server.entities.AdvertisingObjectEntity;
+import com.vmp.server.repositories.AdvertisingObjectRep;
 import com.vmp.server.response.*;
 import com.vmp.server.service.CommercialProposalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +15,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class CommercialProposalController {
 
     @Autowired
     CommercialProposalService commercialProposalService;
+
+    @Autowired
+    AdvertisingObjectRep advertisingObjectRep;
 
     @PostMapping(path = "/cp")
     public void createCP(@RequestBody CPResponse cpResponse, HttpServletResponse response) {
@@ -97,7 +104,6 @@ public class CommercialProposalController {
 
     @PostMapping(path = "/cp_count_discount")
     public ResponseEntity<ArrayList<Double>> countCPDiscount(@RequestBody DiscountRequest discountRequest) {
-
         ArrayList<Double> response = new ArrayList<>();
         Double discPrice = discountRequest.getPrice()*(1-discountRequest.getDiscount())*(1-discountRequest.getStrDiscount());
         Double finPrice = discPrice*discountRequest.getAoCount()*discountRequest.getDuration();
@@ -105,6 +111,33 @@ public class CommercialProposalController {
         response.add(discPrice);
         response.add(finPrice);
 
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/cp_form_estimate")
+    public ResponseEntity<ArrayList<EstimateResponse>> fillEstimate (@RequestBody ArrayList<Integer> ids) {
+
+        ArrayList<AdvertisingObjectEntity> advObjects = advertisingObjectRep.findByIdIn(ids);
+        HashMap<String, Integer> countAO = new HashMap<>();
+
+        for (AdvertisingObjectEntity o: advObjects) {
+            if (countAO.containsKey(o.getCity().getCity())){
+                countAO.put(o.getCity().getCity(), countAO.get(o.getCity().getCity()) + 1);
+            } else{
+                countAO.put(o.getCity().getCity(), 1);
+            }
+        }
+
+        ArrayList<EstimateResponse> response = new ArrayList<>();
+
+        int commonValue = 0;
+
+        for(Map.Entry<String, Integer> entry: countAO.entrySet()) {
+            response.add(new EstimateResponse(entry.getKey(), entry.getValue()));
+            commonValue += entry.getValue();
+        }
+
+        response.add(new EstimateResponse("Итого", commonValue));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

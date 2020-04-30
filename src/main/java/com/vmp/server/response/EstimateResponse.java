@@ -33,6 +33,11 @@ public class EstimateResponse {
         this.cpt = cpt;
     }
 
+    public EstimateResponse(String city, Integer ao_count) {
+        this.city = city;
+        this.ao_count = ao_count;
+    }
+
     public String getCity() {
         return city;
     }
