@@ -105,4 +105,12 @@ public class VMPUserController {
         vmpUserRep.save(oldUser);
         return ResponseEntity.ok(new MessageResponse("Информация о пользователе успешно изменена!"));
     }
+
+    @PutMapping("/updatePassword/{id}/{password}")
+    public ResponseEntity<?> updatePassword(@PathVariable Integer id, @PathVariable String password) {
+        VMPUserEntity user = vmpUserRep.getOne(id);
+        user.setPassword(encoder.encode(password));
+        vmpUserRep.save(user);
+        return ResponseEntity.ok(new MessageResponse("Пароль изменён"));
+    }
 }
