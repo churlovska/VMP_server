@@ -70,8 +70,15 @@ public class CommercialProposalController {
     }
 
     @PostMapping(path = "/cp_count/{b1_price}")
-    public ResponseEntity<EstimateCountResponse> countCP(@RequestBody ArrayList<EstimateRequest> estimateRequests,
+    public ResponseEntity<EstimateCountResponse> countCP(@RequestBody ArrayList<EstimateResponse> estimateResponses,
                                                          @PathVariable Double b1_price) {
+
+        Double discount;
+        for (EstimateResponse o: estimateResponses) {
+            discount = Double.parseDouble(o.getDiscount().substring(0, o.getDiscount().indexOf('%')))/100.0;
+            o.setDiscount_price(o.getPrice()*discount*(1-o.getStrategic_discount()/100.0));
+            o.setFinal_price(o.getDiscount_price()*o.getAo_count()*o.getDuration());
+        }
 
         int ao_count_comm = 0;
         double price_comm = 0;
@@ -83,7 +90,7 @@ public class CommercialProposalController {
         double price_fin;
         double price_vat_fin;
 
-        for (EstimateRequest o: estimateRequests) {
+        for (EstimateResponse o: estimateResponses) {
             ao_count_comm += o.getAo_count();
             price_comm += o.getFinal_price();
             traffic_comm += o.getVisits_traffic();
@@ -92,26 +99,15 @@ public class CommercialProposalController {
             cpt_comm += o.getCpt();
         }
 
+        estimateResponses.add(new EstimateResponse("Итого", ao_count_comm, price_comm, traffic_comm, ots_comm, coverage_comm, cpt_comm));
+
         placement_fin = price_comm*1.2;
         price_fin = placement_fin + b1_price;
         price_vat_fin = price_fin*1.2;
 
-        EstimateCountResponse estimateCountResponse = new EstimateCountResponse(ao_count_comm, price_comm, traffic_comm, ots_comm,
-                coverage_comm, cpt_comm, placement_fin, b1_price, price_fin, price_vat_fin);
+        EstimateCountResponse estimateCountResponse = new EstimateCountResponse(placement_fin, b1_price, price_fin, price_vat_fin, estimateResponses);
 
         return new ResponseEntity<>(estimateCountResponse, HttpStatus.OK);
-    }
-
-    @PostMapping(path = "/cp_count_discount")
-    public ResponseEntity<ArrayList<Double>> countCPDiscount(@RequestBody DiscountRequest discountRequest) {
-        ArrayList<Double> response = new ArrayList<>();
-        Double discPrice = discountRequest.getPrice()*(1-discountRequest.getDiscount())*(1-discountRequest.getStrDiscount());
-        Double finPrice = discPrice*discountRequest.getAoCount()*discountRequest.getDuration();
-
-        response.add(discPrice);
-        response.add(finPrice);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(path = "/cp_form_estimate")

@@ -18,6 +18,16 @@ public class EstimateResponse {
     public EstimateResponse() {
     }
 
+    public EstimateResponse(String city, Integer ao_count, Double final_price, Integer visits_traffic, Integer ots_contacts, Integer coverage_people, Double cpt) {
+        this.city = city;
+        this.ao_count = ao_count;
+        this.final_price = final_price;
+        this.visits_traffic = visits_traffic;
+        this.ots_contacts = ots_contacts;
+        this.coverage_people = coverage_people;
+        this.cpt = cpt;
+    }
+
     public EstimateResponse(String city, Integer ao_count, Double price, Integer duration, String discount, Double strategic_discount, Double discount_price, Double final_price, Integer visits_traffic, Integer ots_contacts, Integer coverage_people, Double cpt) {
         this.city = city;
         this.ao_count = ao_count;
