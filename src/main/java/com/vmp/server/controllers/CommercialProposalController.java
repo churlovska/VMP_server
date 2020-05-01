@@ -33,12 +33,12 @@ public class CommercialProposalController {
     CommercialProposalRep commercialProposalRep;
 
     @PostMapping(path = "/cp")
-    public void createCP(@RequestBody CPResponse cpResponse, HttpServletResponse response) {
+    public void createCP(@RequestBody CPRequest cpRequest, HttpServletResponse response) {
 
         System.out.println("POST comm_proposal");
 
-        if (cpResponse != null) {
-            boolean addedCP = commercialProposalService.createCP(-1, cpResponse);
+        if (cpRequest != null) {
+            boolean addedCP = commercialProposalService.createCP(-1, cpRequest);
 
             if (!addedCP) {
                 System.out.println("CP not added");
@@ -48,7 +48,7 @@ public class CommercialProposalController {
 
             System.out.println("CP added");
 
-            String excelCreated = commercialProposalService.createExcel(cpResponse);
+            String excelCreated = commercialProposalService.createExcel(cpRequest);
 
             if (excelCreated == null) {
                 System.out.println("excel not added");
@@ -152,5 +152,12 @@ public class CommercialProposalController {
             cpListResponses.add(new CPListResponse(o.getId(), o.getName(), o.getClient(), o.getCreatingDate()));
         }
         return new ResponseEntity<>(cpListResponses, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/cp/{id}")
+    public ResponseEntity<CPResponse> selectCPById(@PathVariable Integer id) {
+
+        CPResponse cpResponse = commercialProposalService.selectCPById(id);
+        return new ResponseEntity<>(cpResponse, HttpStatus.OK);
     }
 }

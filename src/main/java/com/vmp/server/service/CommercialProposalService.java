@@ -5,8 +5,11 @@ import com.vmp.server.entities.CommercialProposalEntity;
 import com.vmp.server.entities.EstimateEntity;
 import com.vmp.server.entities.PreparedCommercialProposalEntity;
 import com.vmp.server.repositories.*;
+import com.vmp.server.response.AOListResponse;
+import com.vmp.server.response.CPRequest;
 import com.vmp.server.response.CPResponse;
 import com.vmp.server.response.EstimateResponse;
+import io.swagger.models.auth.In;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +43,7 @@ public class CommercialProposalService {
     AdvertisingObjectRep advertisingObjectRep;
 
     @Transactional
-    public boolean createCP(int id, CPResponse newCP) {
+    public boolean createCP(int id, CPRequest newCP) {
 
         try {
             CommercialProposalEntity commercialProposalEntity = new CommercialProposalEntity();
@@ -84,7 +88,7 @@ public class CommercialProposalService {
         }
     }
 
-    public String createExcel(CPResponse newCP) {
+    public String createExcel(CPRequest newCP) {
 
         try {
 
@@ -335,5 +339,51 @@ public class CommercialProposalService {
         cell = row.createCell(11);
         cell.setCellValue(cell11);
         cell.setCellStyle(style);
+    }
+
+    public CPResponse selectCPById (Integer id) {
+
+        CPResponse cpResponse = new CPResponse();
+        CommercialProposalEntity commercialProposalEntity = commercialProposalRep.getOne(id);
+
+        cpResponse.setName(commercialProposalEntity.getName());
+        cpResponse.setClient(commercialProposalEntity.getClient());
+        cpResponse.setBrand(commercialProposalEntity.getBrand());
+        cpResponse.setPlacing_format(commercialProposalEntity.getPlacing_format());
+        cpResponse.setDate_from(commercialProposalEntity.getDate_from());
+        cpResponse.setDate_to(commercialProposalEntity.getDate_to());
+        cpResponse.setCreating_date(commercialProposalEntity.getCreatingDate());
+        cpResponse.setPlacement_fin(commercialProposalEntity.getPlacement_fin());
+        cpResponse.setB1_price(commercialProposalEntity.getB1_price());
+        cpResponse.setPrice_fin(commercialProposalEntity.getPrice_fin());
+        cpResponse.setPrice_vat_fin(commercialProposalEntity.getPrice_vat_fin());
+
+        ArrayList<PreparedCommercialProposalEntity> preparedCommercialProposalEntities = preparedCommercialProposalRep.findByCommProposal(commercialProposalEntity);
+        ArrayList<AOListResponse> aoListResponses = new ArrayList<>();
+
+        for (PreparedCommercialProposalEntity o: preparedCommercialProposalEntities) {
+            aoListResponses.add(new AOListResponse(o.getAdvertisingObject().getId(), o.getAdvertisingObject().getCity().getCity(),
+                    o.getAdvertisingObject().getName(), o.getAdvertisingObject().getAddress(), o.getAdvertisingObject().getFloor(),
+                    o.getAdvertisingObject().getSegment().getSegment(), o.getAdvertisingObject().getMi_type().getType(),
+                    o.getAdvertisingObject().getMi().getSignificance()));
+        }
+
+        cpResponse.setAdvObjects(aoListResponses);
+
+        ArrayList<EstimateEntity> estimateEntities = estimateRep.findAllByCpId(commercialProposalEntity);
+        ArrayList<EstimateResponse> estimateResponses = new ArrayList<>();
+
+        for (EstimateEntity o: estimateEntities) {
+            estimateResponses.add(new EstimateResponse(o.getCity_id().getCity(), o.getAo_count(),
+                    o.getPrice(), o.getDuration(), o.getDiscount(), o.getStrategic_discount(), o.getDiscount_price(),
+                    o.getFinal_price(), o.getVisits_traffic(), o.getOts_contacts(), o.getCoverage_people(), o.getCpt()));
+        }
+
+        estimateResponses.add(new EstimateResponse("Итого", commercialProposalEntity.getAo_count_comm(),
+                commercialProposalEntity.getPrice_comm(), commercialProposalEntity.getTraffic_comm(),
+                commercialProposalEntity.getOts_comm(), commercialProposalEntity.getCoverage_comm(), commercialProposalEntity.getCpt_comm()));
+
+        cpResponse.setEstimateList(estimateResponses);
+        return cpResponse;
     }
 }

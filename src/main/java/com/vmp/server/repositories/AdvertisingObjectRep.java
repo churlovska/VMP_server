@@ -19,4 +19,6 @@ public interface AdvertisingObjectRep extends JpaRepository<AdvertisingObjectEnt
     void deleteById(Integer integer);
 
     ArrayList<AdvertisingObjectEntity> findByIdIn(ArrayList<Integer> ids);
+
+
 }

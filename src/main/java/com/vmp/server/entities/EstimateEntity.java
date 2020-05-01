@@ -13,7 +13,7 @@ public class EstimateEntity {
 
     @OneToOne
     @JoinColumn(name = "cp_id", referencedColumnName = "id")
-    private CommercialProposalEntity cp_id;
+    private CommercialProposalEntity cpId;
 
     @OneToOne
     @JoinColumn(name = "city_id", referencedColumnName = "id")
@@ -59,7 +59,7 @@ public class EstimateEntity {
                           Double strategic_discount, Double discount_price, Double final_price, Integer visits_traffic, Integer ots_contacts,
                           Integer coverage_people, Double cpt) {
         this.city_id = city_id;
-        this.cp_id = cp_id;
+        this.cpId = cp_id;
         this.ao_count = ao_count;
         this.price = price;
         this.duration = duration;
@@ -81,12 +81,12 @@ public class EstimateEntity {
         this.id = id;
     }
 
-    public CommercialProposalEntity getCp_id() {
-        return cp_id;
+    public CommercialProposalEntity getCpId() {
+        return cpId;
     }
 
-    public void setCp_id(CommercialProposalEntity cp_id) {
-        this.cp_id = cp_id;
+    public void setCpId(CommercialProposalEntity cp_id) {
+        this.cpId = cp_id;
     }
 
     public CityEntity getCity_id() {

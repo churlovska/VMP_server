@@ -12,18 +12,18 @@ public class PreparedCommercialProposalEntity {
 
     @OneToOne
     @JoinColumn(name = "advertising_object", referencedColumnName = "id")
-    private AdvertisingObjectEntity advertising_object;
+    private AdvertisingObjectEntity advertisingObject;
 
     @OneToOne
     @JoinColumn(name = "commercial_proposal_id", referencedColumnName = "id")
-    private CommercialProposalEntity commercial_proposal;
+    private CommercialProposalEntity commProposal;
 
     public PreparedCommercialProposalEntity() {
     }
 
     public PreparedCommercialProposalEntity(AdvertisingObjectEntity advertising_object, CommercialProposalEntity commercial_proposal) {
-        this.advertising_object = advertising_object;
-        this.commercial_proposal = commercial_proposal;
+        this.advertisingObject = advertising_object;
+        this.commProposal = commercial_proposal;
     }
 
     public Integer getId() {
@@ -34,19 +34,19 @@ public class PreparedCommercialProposalEntity {
         this.id = id;
     }
 
-    public AdvertisingObjectEntity getAdvertising_object() {
-        return advertising_object;
+    public AdvertisingObjectEntity getAdvertisingObject() {
+        return advertisingObject;
     }
 
-    public void setAdvertising_object(AdvertisingObjectEntity advertising_object) {
-        this.advertising_object = advertising_object;
+    public void setAdvertisingObject(AdvertisingObjectEntity advertising_object) {
+        this.advertisingObject = advertising_object;
     }
 
-    public CommercialProposalEntity getCommercial_proposal() {
-        return commercial_proposal;
+    public CommercialProposalEntity getCommProposal() {
+        return commProposal;
     }
 
-    public void setCommercial_proposal(CommercialProposalEntity commercial_proposal_id) {
-        this.commercial_proposal = commercial_proposal_id;
+    public void setCommProposal(CommercialProposalEntity commercial_proposal_id) {
+        this.commProposal = commercial_proposal_id;
     }
 }
