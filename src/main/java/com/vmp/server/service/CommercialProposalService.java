@@ -48,7 +48,7 @@ public class CommercialProposalService {
 
             commercialProposalEntity.setBrand(newCP.getBrand());
             commercialProposalEntity.setClient(newCP.getClient());
-            commercialProposalEntity.setCreating_date(newCP.getCreating_date());
+            commercialProposalEntity.setCreatingDate(newCP.getCreating_date());
             commercialProposalEntity.setDate_from(newCP.getDate_from());
             commercialProposalEntity.setDate_to(newCP.getDate_to());
             commercialProposalEntity.setName(newCP.getName());

@@ -1,7 +1,9 @@
 package com.vmp.server.controllers;
 
 import com.vmp.server.entities.AdvertisingObjectEntity;
+import com.vmp.server.entities.CommercialProposalEntity;
 import com.vmp.server.repositories.AdvertisingObjectRep;
+import com.vmp.server.repositories.CommercialProposalRep;
 import com.vmp.server.response.*;
 import com.vmp.server.service.CommercialProposalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class CommercialProposalController {
 
     @Autowired
     AdvertisingObjectRep advertisingObjectRep;
+
+    @Autowired
+    CommercialProposalRep commercialProposalRep;
 
     @PostMapping(path = "/cp")
     public void createCP(@RequestBody CPResponse cpResponse, HttpServletResponse response) {
@@ -135,5 +140,17 @@ public class CommercialProposalController {
 
         response.add(new EstimateResponse("Итого", commonValue));
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/cp")
+    public ResponseEntity<ArrayList<CPListResponse>> selectCPs() {
+
+        ArrayList<CPListResponse> cpListResponses = new ArrayList<>();
+        ArrayList<CommercialProposalEntity> commercialProposalEntities = commercialProposalRep.findByOrderByCreatingDateDesc();
+
+        for (CommercialProposalEntity o: commercialProposalEntities) {
+            cpListResponses.add(new CPListResponse(o.getId(), o.getName(), o.getClient(), o.getCreatingDate()));
+        }
+        return new ResponseEntity<>(cpListResponses, HttpStatus.OK);
     }
 }

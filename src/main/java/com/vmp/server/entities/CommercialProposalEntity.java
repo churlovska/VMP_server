@@ -28,7 +28,7 @@ public class CommercialProposalEntity {
     private Date date_to;
 
     @Column(name = "creating_date", nullable = false)
-    private Date creating_date;
+    private Date creatingDate;
 
     @Column(name = "placing_format", nullable = false)
     private String placing_format;
@@ -104,12 +104,12 @@ public class CommercialProposalEntity {
         this.date_to = date_to;
     }
 
-    public Date getCreating_date() {
-        return creating_date;
+    public Date getCreatingDate() {
+        return creatingDate;
     }
 
-    public void setCreating_date(Date creating_date) {
-        this.creating_date = creating_date;
+    public void setCreatingDate(Date creating_date) {
+        this.creatingDate = creating_date;
     }
 
     public String getPlacing_format() {
