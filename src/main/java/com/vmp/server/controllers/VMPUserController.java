@@ -7,6 +7,7 @@ import com.vmp.server.response.MessageResponse;
 import com.vmp.server.response.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,11 +35,13 @@ public class VMPUserController {
     JwtUtils jwtUtils;
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<VMPUserEntity> selectUsers() {
         return vmpUserRep.findByOrderByLastnameAscFirstnameAscLoginAsc();
     }
 
     @DeleteMapping("/user/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@PathVariable Integer id) {
 
         try {
@@ -51,6 +54,7 @@ public class VMPUserController {
     }
 
     @PutMapping("/updateUser/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateUser(@Valid @RequestBody SignupRequest newUser, @PathVariable Integer id) {
 
         VMPUserEntity oldUser = vmpUserRep.getOne(id);
@@ -107,6 +111,7 @@ public class VMPUserController {
     }
 
     @PutMapping("/updatePassword/{id}/{password}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> updatePassword(@PathVariable Integer id, @PathVariable String password) {
         VMPUserEntity user = vmpUserRep.getOne(id);
         user.setPassword(encoder.encode(password));

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
@@ -26,6 +27,7 @@ public class AdvertisingObjectController {
     AdvertisingObjectService advertisingObjectService;
 
     @DeleteMapping("/ao/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Integer> deleteAO(@PathVariable Integer id) {
 
         boolean isRemoved = advertisingObjectService.deleteAO(id);
@@ -37,6 +39,7 @@ public class AdvertisingObjectController {
     }
 
     @PostMapping(path = "/ao")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Integer> createAo(@RequestBody AOResponse aoResponse) {
 
         System.out.println("POST adv_object");
@@ -55,6 +58,7 @@ public class AdvertisingObjectController {
     }
 
     @PutMapping(path = "/ao/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Integer> updateAo(@PathVariable Integer id, @RequestBody AOResponse aoResponse) {
 
         if (aoResponse != null) {
@@ -72,6 +76,7 @@ public class AdvertisingObjectController {
     }
 
     @GetMapping("/ao")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<AdvertisingObjectEntity> selectAO(@Param(value = "miTypeId") String miTypeId,
                                                   @Param(value = "cityId") String cityId,
                                                   @Param(value = "reservation") String reservation,
@@ -137,8 +142,7 @@ public class AdvertisingObjectController {
             }
 
             try {
-                Predicate predicate = cb.and(predicates.toArray(new Predicate[predicates.size()]));
-                return predicate;
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             } catch (NoResultException nre) {
                 return null;
             }

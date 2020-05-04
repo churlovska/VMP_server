@@ -9,6 +9,7 @@ import com.vmp.server.service.CommercialProposalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +34,7 @@ public class CommercialProposalController {
     CommercialProposalRep commercialProposalRep;
 
     @PostMapping(path = "/cp")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public void createCP(@RequestBody CPRequest cpRequest, HttpServletResponse response) {
 
         System.out.println("POST comm_proposal");
@@ -75,6 +77,7 @@ public class CommercialProposalController {
     }
 
     @PostMapping(path = "/cp_count/{b1_price}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<EstimateCountResponse> countCP(@RequestBody ArrayList<EstimateResponse> estimateResponses,
                                                          @PathVariable Double b1_price) {
 
@@ -116,6 +119,7 @@ public class CommercialProposalController {
     }
 
     @PostMapping(path = "/cp_form_estimate")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<ArrayList<EstimateResponse>> fillEstimate (@RequestBody ArrayList<Integer> ids) {
 
         ArrayList<AdvertisingObjectEntity> advObjects = advertisingObjectRep.findByIdIn(ids);
@@ -143,6 +147,7 @@ public class CommercialProposalController {
     }
 
     @GetMapping(path = "/cp")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<ArrayList<CPListResponse>> selectCPs() {
 
         ArrayList<CPListResponse> cpListResponses = new ArrayList<>();
@@ -155,6 +160,7 @@ public class CommercialProposalController {
     }
 
     @GetMapping(path = "/cp/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<CPResponse> selectCPById(@PathVariable Integer id) {
 
         CPResponse cpResponse = commercialProposalService.selectCPById(id);
