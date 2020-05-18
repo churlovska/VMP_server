@@ -12,12 +12,12 @@ public class CityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false)
     @JsonProperty(value = "id")
     private Integer id;
 
     @JsonProperty(value = "city")
-    @Column(name = "city", length = 30, nullable = false)
+    @Column(length = 30, nullable = false)
     private String city;
 
     public CityEntity() {

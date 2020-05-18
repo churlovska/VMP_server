@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.Predicate;
@@ -36,6 +37,25 @@ public class AdvertisingObjectController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/ao_photo")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Integer> createAo(@RequestBody AOResponse aoResponse, @RequestParam("file") MultipartFile file) {
+
+        System.out.println("POST adv_object");
+
+        if (aoResponse != null) {
+            boolean addedAO = advertisingObjectService.createAOPhoto(-1, aoResponse, file);
+
+            if (addedAO) {
+                System.out.println("AO added");
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                System.out.println("AO not added");
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping(path = "/ao")
@@ -94,6 +114,7 @@ public class AdvertisingObjectController {
         return advertisingObjectRep.findAll((Specification<AdvertisingObjectEntity>) (root, query, cb) -> {
 
             List<Predicate> predicates = new ArrayList<>();
+
             if(placementPossibility != null) {
                 predicates.add(cb.equal(root.get("possibility_of_placement"), Boolean.valueOf(placementPossibility)));
             }

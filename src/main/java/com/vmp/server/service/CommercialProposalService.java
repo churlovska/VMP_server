@@ -279,13 +279,6 @@ public class CommercialProposalService {
                 i++;
             }
 
-//            String fileLocation = FileSystems.getDefault()
-//                    .getPath("")
-//                    .toAbsolutePath()
-//                    .toString();
-//
-//            System.out.println(fileLocation);
-
             String fileLocation = "d:\\TMP\\" + newCP.getName() + ".xlsx";
 
             FileOutputStream outputStream = new FileOutputStream(fileLocation);
