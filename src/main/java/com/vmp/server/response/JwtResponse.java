@@ -5,19 +5,29 @@ import java.util.List;
 public class JwtResponse {
 
     private String jwt;
+    private Integer id;
     private String login;
     private String lastName;
     private String firstName;
     private Integer cityId;
     List<String> roles;
 
-    public JwtResponse(String jwt, String login, String lastName, String firstName, Integer cityId, List<String> roles) {
+    public JwtResponse(String jwt, Integer id, String login, String lastName, String firstName, Integer cityId, List<String> roles) {
         this.jwt = jwt;
+        this.id = id;
         this.login = login;
         this.lastName = lastName;
         this.firstName = firstName;
         this.cityId = cityId;
         this.roles = roles;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getJwt() {

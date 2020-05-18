@@ -14,6 +14,7 @@ public class VMPUserDetails implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
     private String login;
     @JsonIgnore
     private String password;
@@ -23,8 +24,9 @@ public class VMPUserDetails implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
 
-    public VMPUserDetails(String login, String password, String lastname, String firstname, CityEntity city_id,
+    public VMPUserDetails(Integer id, String login, String password, String lastname, String firstname, CityEntity city_id,
                          Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
         this.login = login;
         this.password = password;
         this.authorities = authorities;
@@ -39,6 +41,7 @@ public class VMPUserDetails implements UserDetails {
                 AuthorityUtils.commaSeparatedStringToAuthorityList(String.valueOf(user.getRoles().getRole()));
 
         return new VMPUserDetails(
+                user.getId(),
                 user.getLogin(),
                 user.getPassword(),
                 user.getLastname(),
@@ -72,6 +75,14 @@ public class VMPUserDetails implements UserDetails {
 
     public CityEntity getCity_id() {
         return city_id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override

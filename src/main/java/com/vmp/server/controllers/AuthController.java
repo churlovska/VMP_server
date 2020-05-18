@@ -64,6 +64,7 @@ public class AuthController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new JwtResponse(jwt,
+                userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getLastname(),
                 userDetails.getFirstname(),
@@ -94,24 +95,25 @@ public class AuthController {
             VMPRolesEntity userRole = vmpRolesRep.findByRole(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Ошибка: роль не найдена."));
             roles.add(userRole);
+            System.out.println("SMTH");
         } else {
                 switch (strRoles) {
                     case "admin":
                         VMPRolesEntity adminRole = vmpRolesRep.findByRole(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Ошибка: роль не найдена."));
                         user.setRoles(adminRole);
-
+                        System.out.println("ADMIN");
                         break;
                     case "mod":
                         VMPRolesEntity modRole = vmpRolesRep.findByRole(ERole.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Ошибка: роль не найдена."));
                         user.setRoles(modRole);
-
                         break;
                     default:
                         VMPRolesEntity userRole = vmpRolesRep.findByRole(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Ошибка: роль не найдена."));
                         user.setRoles(userRole);
+                        System.out.println("User");
                 }
         }
 
