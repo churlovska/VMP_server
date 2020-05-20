@@ -5,13 +5,17 @@ import com.vmp.server.repositories.AdvertisingObjectRep;
 import com.vmp.server.response.AOResponse;
 import com.vmp.server.service.AdvertisingObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.Predicate;
@@ -39,25 +43,6 @@ public class AdvertisingObjectController {
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/ao_photo")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Integer> createAo(@RequestBody AOResponse aoResponse, @RequestParam("file") MultipartFile file) {
-
-        System.out.println("POST adv_object");
-
-        if (aoResponse != null) {
-            boolean addedAO = advertisingObjectService.createAOPhoto(-1, aoResponse, file);
-
-            if (addedAO) {
-                System.out.println("AO added");
-                return new ResponseEntity<>(HttpStatus.OK);
-            } else {
-                System.out.println("AO not added");
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-
     @PostMapping(path = "/ao")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Integer> createAo(@RequestBody AOResponse aoResponse) {
@@ -75,6 +60,33 @@ public class AdvertisingObjectController {
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(path = "/ao_photo/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Integer> addPhoto(@RequestParam(value="file") MultipartFile image, @PathVariable Integer id) {
+        if (image != null) {
+            boolean addedPhoto = advertisingObjectService.addPhotoAO(image, id);
+
+            if (addedPhoto) {
+                System.out.println("Photo added");
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                System.out.println("Photo not added");
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/load_photo/{id}")
+    public ResponseEntity<?> downloadFile(@PathVariable Integer id) {
+        // Load file from database
+        AdvertisingObjectEntity ao = advertisingObjectRep.findById(id).get();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"photo\"")
+                .body(new ByteArrayResource(ao.getPhoto()));
     }
 
     @PutMapping(path = "/ao/{id}")

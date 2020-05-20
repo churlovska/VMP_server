@@ -99,7 +99,8 @@ public class AdvertisingObjectEntity {
     @Column(name="client", length = 500)
     private String client;
 
-    @Column(name="photo", length = 500)
+
+    @Column(name="photo")
     private byte[] photo;
 
     public AdvertisingObjectEntity() {}
@@ -107,7 +108,7 @@ public class AdvertisingObjectEntity {
     public AdvertisingObjectEntity(String name, String address, Boolean reservation_status,
                                    Integer floor, Boolean neighbors, String place_description, String specialist_description, String contract,
                                    Double price, Date date_from, Date date_to, String comments, Integer pockets, Boolean possibility_of_placement,
-                                   String client, byte[] photo) {
+                                   String client) {
         this.name = name;
         this.address = address;
         this.reservation_status = reservation_status;
@@ -123,7 +124,6 @@ public class AdvertisingObjectEntity {
         this.pockets = pockets;
         this.possibility_of_placement = possibility_of_placement;
         this.client = client;
-        this.photo = photo;
     }
 
     public Integer getId() {

@@ -20,5 +20,4 @@ public interface AdvertisingObjectRep extends JpaRepository<AdvertisingObjectEnt
 
     ArrayList<AdvertisingObjectEntity> findByIdIn(ArrayList<Integer> ids);
 
-
 }

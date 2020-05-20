@@ -27,9 +27,8 @@ public class AOResponse {
     private Integer mi_type_id;
     private Boolean possibility_of_placement;
     private String client;
-    private byte[] photo;
 
-    public AOResponse(String name, String address, Integer city_id, Integer mi_id, Boolean reservation_status, Integer segment_id, Integer subsegment1_id, Integer subsegment2_id, Integer subsegment3_id, Integer placing_format_id, Integer floor, Boolean neighbors, String place_description, String specialist_description, String contract, Double price, Date date_from, Date date_to, String comments, Integer pockets, Integer mi_type_id, Boolean possibility_of_placement, String client, byte[] photo) {
+    public AOResponse(String name, String address, Integer city_id, Integer mi_id, Boolean reservation_status, Integer segment_id, Integer subsegment1_id, Integer subsegment2_id, Integer subsegment3_id, Integer placing_format_id, Integer floor, Boolean neighbors, String place_description, String specialist_description, String contract, Double price, Date date_from, Date date_to, String comments, Integer pockets, Integer mi_type_id, Boolean possibility_of_placement, String client) {
         this.name = name;
         this.address = address;
         this.city_id = city_id;
@@ -53,7 +52,6 @@ public class AOResponse {
         this.mi_type_id = mi_type_id;
         this.possibility_of_placement = possibility_of_placement;
         this.client = client;
-        this.photo = photo;
     }
 
     public String getName() {
@@ -238,13 +236,5 @@ public class AOResponse {
 
     public void setClient(String client) {
         this.client = client;
-    }
-
-    public byte[] getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
     }
 }
