@@ -27,7 +27,7 @@ public class AdvertisingObjectService {
     AOTypesRep aoTypesRep;
 
     @Transactional
-    public boolean createAO(int id, AOResponse newAO) {
+    public Integer createAO(int id, AOResponse newAO) {
 
         AdvertisingObjectEntity advertisingObjectEntity = new AdvertisingObjectEntity(
                 newAO.getName(), newAO.getAddress(), newAO.getReservation_status(), newAO.getFloor(),
@@ -56,12 +56,12 @@ public class AdvertisingObjectService {
         }
 
         try {
-            advertisingObjectRep.save(advertisingObjectEntity);
-            return true;
+            AdvertisingObjectEntity aoRet = advertisingObjectRep.save(advertisingObjectEntity);
+            return aoRet.getId();
         }
         catch(Exception ex) {
             ex.printStackTrace();
-            return false;
+            return null;
         }
     }
 

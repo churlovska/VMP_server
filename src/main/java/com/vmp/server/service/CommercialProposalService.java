@@ -89,7 +89,6 @@ public class CommercialProposalService {
     public String createExcel(CPRequest newCP) {
 
         try {
-
             List<EstimateResponse> estimateResponses = new ArrayList<>(newCP.getEstimateList());
             List<Integer> advObjects = new ArrayList<>(newCP.getAdvObjectsId());
 
@@ -122,9 +121,9 @@ public class CommercialProposalService {
             headerStyle.setFont(font);
 
             Cell headerCell = header.createCell(0);
-            headerCell.setCellValue("Коммерческое предложение VITA Media");
-            headerStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-            headerCell.setCellStyle(headerStyle);
+//            headerCell.setCellValue("Коммерческое предложение VITA Media");
+//            headerStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
+//            headerCell.setCellStyle(headerStyle);
 
             CellStyle style = workbook.createCellStyle();
             style.setWrapText(true);
@@ -132,7 +131,7 @@ public class CommercialProposalService {
             rowInd +=2;
             Row row = sheet.createRow(rowInd);
             Cell cell = row.createCell(0);
-            cell.setCellValue(newCP.getName());
+            cell.setCellValue("Коммерческое предложение");
             cell.setCellStyle(style);
 
             rowInd++;
@@ -153,22 +152,13 @@ public class CommercialProposalService {
             cell.setCellValue(newCP.getBrand());
             cell.setCellStyle(style);
 
-            rowInd++;
-            row = sheet.createRow(rowInd);
-            cell = row.createCell(0);
-            cell.setCellValue("Формат:");
-            cell.setCellStyle(style);
-            cell = row.createCell(1);
-            cell.setCellValue(newCP.getPlacing_format());
-            cell.setCellStyle(style);
-
-            rowInd += 2;
+            rowInd ++;
             row = sheet.createRow(rowInd);
             cell = row.createCell(0);
             cell.setCellValue("Период:");
             cell.setCellStyle(style);
             cell = row.createCell(1);
-            cell.setCellValue("с " + newCP.getDate_from() + " по " + newCP.getDate_to());
+            cell.setCellValue(newCP.getDate_from() + "-" + newCP.getDate_to());
             cell.setCellStyle(style);
 
             rowInd++;
@@ -180,12 +170,14 @@ public class CommercialProposalService {
             cell.setCellValue(String.valueOf(newCP.getCreating_date()));
             cell.setCellStyle(style);
 
-            rowInd += 2;
-            header = sheet.createRow(rowInd);
-            headerCell = header.createCell(0);
-            headerCell.setCellValue("Смета");
-            headerStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-            headerCell.setCellStyle(headerStyle);
+            rowInd++;
+            row = sheet.createRow(rowInd);
+            cell = row.createCell(0);
+            cell.setCellValue("Формат:");
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue(newCP.getPlacing_format());
+            cell.setCellStyle(style);
 
             rowInd += 2;
             row = sheet.createRow(rowInd);
@@ -214,6 +206,16 @@ public class CommercialProposalService {
 
             rowInd++;
             row = sheet.createRow(rowInd);
+
+            cell = row.createCell(0);
+            cell.setCellValue("Итого");
+            cell.setCellStyle(style);
+
+            cell = row.createCell(1);
+            cell.setCellValue(String.valueOf(newCP.getAo_count_comm()));
+            cell.setCellStyle(style);
+
+            sheet.addMergedRegion(CellRangeAddress.valueOf("I13:L13"));
 
             fillEstimateRow(style, row, "Итого", String.valueOf(newCP.getAo_count_comm()), "", "", "", "", "", String.valueOf(newCP.getPrice_comm()),
                     String.valueOf(newCP.getTraffic_comm()), String.valueOf(newCP.getOts_comm()), String.valueOf(newCP.getCoverage_comm()), String.valueOf(newCP.getCpt_comm()));

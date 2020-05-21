@@ -50,11 +50,11 @@ public class AdvertisingObjectController {
         System.out.println("POST adv_object");
 
         if (aoResponse != null) {
-            boolean addedAO = advertisingObjectService.createAO(-1, aoResponse);
+            Integer addedAO = advertisingObjectService.createAO(-1, aoResponse);
 
-            if (addedAO) {
+            if (addedAO != null) {
                 System.out.println("AO added");
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(addedAO, HttpStatus.OK);
             } else {
                 System.out.println("AO not added");
             }
@@ -94,11 +94,11 @@ public class AdvertisingObjectController {
     public ResponseEntity<Integer> updateAo(@PathVariable Integer id, @RequestBody AOResponse aoResponse) {
 
         if (aoResponse != null) {
-            boolean addedAO = advertisingObjectService.createAO(id, aoResponse);
+            Integer addedAO = advertisingObjectService.createAO(id, aoResponse);
 
-            if (addedAO) {
+            if (addedAO != null) {
                 System.out.println("AO updated");
-                return new ResponseEntity<>(id, HttpStatus.OK);
+                return new ResponseEntity<>(addedAO, HttpStatus.OK);
             } else {
                 System.out.println("AO not updated");
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
