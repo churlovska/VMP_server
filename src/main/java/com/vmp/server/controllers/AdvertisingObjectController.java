@@ -1,6 +1,7 @@
 package com.vmp.server.controllers;
 
 import com.vmp.server.entities.AdvertisingObjectEntity;
+import com.vmp.server.entities.AdvertisingObjectEntityMapped;
 import com.vmp.server.repositories.AdvertisingObjectRep;
 import com.vmp.server.response.AOResponse;
 import com.vmp.server.service.AdvertisingObjectService;
@@ -180,6 +181,11 @@ public class AdvertisingObjectController {
                 return null;
             }
         });
+    }
+    @GetMapping(path = "/ao/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public AdvertisingObjectEntityMapped getAo(@PathVariable Integer id){
+        return new AdvertisingObjectEntityMapped(advertisingObjectRep.findById(id).get());
     }
 
 
