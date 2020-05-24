@@ -5,12 +5,9 @@ import com.vmp.server.repositories.AdvertisingObjectRep;
 import com.vmp.server.response.AOResponse;
 import com.vmp.server.service.AdvertisingObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,9 +66,9 @@ public class AdvertisingObjectController {
 
     @PostMapping(path = "/ao_photo/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Integer> addPhoto(@RequestParam(value="file") MultipartFile image, @PathVariable Integer id) {
+    public ResponseEntity<Integer> addPhoto(@RequestParam(value = "file") MultipartFile image, @PathVariable Integer id) {
         if (image != null) {
-            boolean addedPhoto = advertisingObjectService.addPhotoAO(image, id);
+            boolean addedPhoto = advertisingObjectService.uploadPhoto(image, id);
 
             if (addedPhoto) {
                 System.out.println("Photo added");
@@ -79,15 +81,26 @@ public class AdvertisingObjectController {
     }
 
     @GetMapping("/load_photo/{id}")
-    public ResponseEntity<?> downloadFile(@PathVariable Integer id) {
-        // Load file from database
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public void createCP(@PathVariable Integer id, HttpServletResponse response) {
+
         AdvertisingObjectEntity ao = advertisingObjectRep.findById(id).get();
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"photo\"")
-                .body(new ByteArrayResource(ao.getPhoto()));
+        Path file = Paths.get(ao.getPhoto());
+        if (Files.exists(file)) {
+            response.setContentType("APPLICATION/OCTET-STREAM");
+            response.addHeader("Content-Disposition", "attachment; filename=" + file);
+
+            try {
+                Files.copy(file, response.getOutputStream());
+                response.getOutputStream().flush();
+                System.out.println("File is sent");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
+
 
     @PutMapping(path = "/ao/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
@@ -124,10 +137,9 @@ public class AdvertisingObjectController {
                                                   @Param(value = "segment2Id") String segmentId2,
                                                   @Param(value = "segment3Id") String segmentId3) {
         return advertisingObjectRep.findAll((Specification<AdvertisingObjectEntity>) (root, query, cb) -> {
-
             List<Predicate> predicates = new ArrayList<>();
 
-            if(placementPossibility != null) {
+            if (placementPossibility != null) {
                 predicates.add(cb.equal(root.get("possibility_of_placement"), Boolean.valueOf(placementPossibility)));
             }
             if (socSign != null) {
@@ -139,7 +151,7 @@ public class AdvertisingObjectController {
             if (floor != null) {
                 predicates.add(cb.equal(root.get("floor"), Integer.valueOf(floor)));
             }
-            if(neighbors != null) {
+            if (neighbors != null) {
                 predicates.add(cb.equal(root.get("neighbors"), Boolean.valueOf(neighbors)));
             }
             if (miTypeId != null) {
@@ -173,7 +185,6 @@ public class AdvertisingObjectController {
                     predicates.add(cb.isNull(root.get("contract")));
                 }
             }
-
             try {
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             } catch (NoResultException nre) {
@@ -183,4 +194,14 @@ public class AdvertisingObjectController {
     }
 
 
+    @GetMapping(path = "/ao/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public AOResponse getAo(@PathVariable Integer id){
+        return new AOResponse(advertisingObjectRep.findById(id).get());
+    }
+
 }
+
+
+
+

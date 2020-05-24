@@ -1,5 +1,7 @@
 package com.vmp.server.response;
 
+import com.vmp.server.entities.AdvertisingObjectEntity;
+
 import java.sql.Date;
 
 public class AOResponse {
@@ -52,6 +54,38 @@ public class AOResponse {
         this.mi_type_id = mi_type_id;
         this.possibility_of_placement = possibility_of_placement;
         this.client = client;
+    }
+
+    public AOResponse(AdvertisingObjectEntity ao) {
+        try {
+            System.out.println(ao);
+            this.address = ao.getAddress();
+            this.city_id = ao.getCity().getId();
+            this.client = ao.getClient();
+            this.date_to = ao.getDate_to();
+            this.date_from = ao.getDate_from();
+            this.comments = ao.getComments();
+            this.mi_type_id = ao.getMi_type().getId();
+            this.mi_id = ao.getMi().getId();
+            this.pockets = ao.getPockets();
+            this.price = ao.getPrice();
+            this.contract = ao.getContract();
+            this.specialist_description = ao.getSpecialist_description();
+            this.place_description = ao.getPlace_description();
+            this.neighbors = ao.getNeighbors();
+            this.segment_id = ao.getSegment() != null ? ao.getSegment().getId() : null;
+            this.subsegment1_id = ao.getSubsegment1() != null ? ao.getSubsegment1().getId() : null;
+            this.subsegment2_id = ao.getSubsegment2() != null ? ao.getSubsegment2().getId() : null;
+            this.subsegment3_id = ao.getSubsegment3() != null ? ao.getSubsegment3().getId() : null;
+            this.place_description = ao.getPlace_description();
+            this.reservation_status = ao.getReservation_status();
+            this.placing_format_id = ao.getPlacing_format().getId();
+            this.floor = ao.getFloor();
+            this.name = ao.getName();
+            this.possibility_of_placement = ao.getPossibility_of_placement();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getName() {

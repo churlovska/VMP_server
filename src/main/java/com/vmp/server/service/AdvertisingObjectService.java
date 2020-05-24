@@ -5,10 +5,17 @@ import com.vmp.server.repositories.*;
 import com.vmp.server.response.AOResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Calendar;
 
 @Service
 public class AdvertisingObjectService {
@@ -25,6 +32,8 @@ public class AdvertisingObjectService {
     FormatsRep formatsRep;
     @Autowired
     AOTypesRep aoTypesRep;
+
+    public String uploadDir = "D:\\TMP\\images\\";
 
     @Transactional
     public Integer createAO(int id, AOResponse newAO) {
@@ -65,15 +74,20 @@ public class AdvertisingObjectService {
         }
     }
 
-    public boolean addPhotoAO (MultipartFile image, Integer id) {
-
+    public boolean uploadPhoto(MultipartFile file, Integer id) {
         try {
             AdvertisingObjectEntity ao = advertisingObjectRep.findById(id).get();
-            ao.setPhoto(image.getBytes());
+            Calendar cal = Calendar.getInstance();
+
+            Path path = Paths
+                    .get(uploadDir + File.separator + StringUtils.cleanPath(cal.getTimeInMillis() + file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+            ao.setPhoto(String.valueOf(path));
             advertisingObjectRep.save(ao);
             return true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

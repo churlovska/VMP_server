@@ -44,7 +44,6 @@ public class CommercialProposalController {
 
             if (!addedCP) {
                 System.out.println("CP not added");
-                //       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 return;
             }
 
