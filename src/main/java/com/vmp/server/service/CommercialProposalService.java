@@ -11,14 +11,18 @@ import com.vmp.server.response.CPResponse;
 import com.vmp.server.response.EstimateResponse;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,97 +96,174 @@ public class CommercialProposalService {
             List<EstimateResponse> estimateResponses = new ArrayList<>(newCP.getEstimateList());
             List<Integer> advObjects = new ArrayList<>(newCP.getAdvObjectsId());
 
-            int rowInd = 0;
+            int rowInd = 5;
 
             Workbook workbook = new XSSFWorkbook();
-
             Sheet sheet = workbook.createSheet("Эстимация");
-            sheet.setColumnWidth(0, 6000);
-            sheet.setColumnWidth(1, 6000);
-            sheet.setColumnWidth(2, 6000);
-            sheet.setColumnWidth(3, 6000);
-            sheet.setColumnWidth(4, 6000);
-            sheet.setColumnWidth(5, 6000);
-            sheet.setColumnWidth(6, 6000);
-            sheet.setColumnWidth(7, 6000);
-            sheet.setColumnWidth(8, 6000);
-            sheet.setColumnWidth(9, 6000);
-            sheet.setColumnWidth(10, 6000);
-            sheet.setColumnWidth(11, 6000);
+            sheet.setDisplayGridlines(false);
 
-            CellStyle headerStyle = workbook.createCellStyle();
-            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            sheet.setColumnWidth(0, 500);
+            sheet.setColumnWidth(1, 4100);
+            sheet.setColumnWidth(2, 4100);
+            sheet.setColumnWidth(3, 4100);
+            sheet.setColumnWidth(4, 4100);
+            sheet.setColumnWidth(5, 4100);
+            sheet.setColumnWidth(6, 4100);
+            sheet.setColumnWidth(7, 4100);
+            sheet.setColumnWidth(8, 4100);
+            sheet.setColumnWidth(9, 4100);
+            sheet.setColumnWidth(10, 4100);
+            sheet.setColumnWidth(11, 4100);
+
+            InputStream inputStream = new FileInputStream("d:\\TMP\\title.png");
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            int pictureIdx = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+            inputStream.close();
+            CreationHelper helper = workbook.getCreationHelper();
+            Drawing drawing = sheet.createDrawingPatriarch();
+
+            ClientAnchor anchor = helper.createClientAnchor();
+            sheet.addMergedRegion(CellRangeAddress.valueOf("A1:H5"));
+
+            anchor.setCol1(0);
+            anchor.setRow1(0);
+
+            Picture pict = drawing.createPicture(anchor, pictureIdx);
+            pict.resize(); //don't do that. Let the anchor resize the image!
 
             XSSFFont font = ((XSSFWorkbook) workbook).createFont();
-            font.setFontName("Arial");
-            font.setFontHeightInPoints((short) 16);
-            headerStyle.setFont(font);
+            font.setFontName("Verdana");
+            font.setFontHeightInPoints((short) 9);
+
+            XSSFFont headerFont = ((XSSFWorkbook) workbook).createFont();
+            headerFont.setFontName("Verdana");
+            headerFont.setFontHeightInPoints((short) 9);
+            headerFont.setColor(IndexedColors.WHITE.getIndex());
+
+            XSSFFont mainFont = ((XSSFWorkbook) workbook).createFont();
+            mainFont.setFontName("Verdana");
+            mainFont.setFontHeightInPoints((short) 9);
+            mainFont.setColor(IndexedColors.GREY_50_PERCENT.getIndex());
 
             CellStyle style = workbook.createCellStyle();
             style.setWrapText(true);
+            style.setFont(font);
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+            style.setBorderTop(BorderStyle.THIN);
+            style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+            style.setBorderRight(BorderStyle.THIN);
+            style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
 
-            rowInd +=2;
+            CellStyle mainHeaderStyle = workbook.createCellStyle();
+            mainHeaderStyle.setWrapText(false);
+            mainHeaderStyle.setFont(mainFont);
+
+            CellStyle headerStyle = workbook.createCellStyle();
+            headerStyle.setWrapText(true);
+            headerStyle.setFont(headerFont);
+            headerStyle.setBorderBottom(BorderStyle.THIN);
+            headerStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+            headerStyle.setBorderTop(BorderStyle.THIN);
+            headerStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+            headerStyle.setBorderRight(BorderStyle.THIN);
+            headerStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+            headerStyle.setBorderLeft(BorderStyle.THIN);
+            headerStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
+            headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            headerStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            CellStyle titleHeader = workbook.createCellStyle();
+            titleHeader.setWrapText(false);
+            titleHeader.setFont(headerFont);
+
+            XSSFCellStyle footerStyle = ((XSSFWorkbook) workbook).createCellStyle();
+            footerStyle.setWrapText(false);
+            footerStyle.setFont(font);
+            footerStyle.setAlignment(HorizontalAlignment.RIGHT);
+            footerStyle.setBorderBottom(BorderStyle.THIN);
+            footerStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+            footerStyle.setBorderTop(BorderStyle.THIN);
+            footerStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+            footerStyle.setBorderRight(BorderStyle.THIN);
+            footerStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+            footerStyle.setBorderLeft(BorderStyle.THIN);
+            footerStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+
+
+
+  //          ((XSSFCellStyle)footerStyle).setFillBackgroundColor(new XSSFColor(new java.awt.Color(232, 82, 82)));
+ //           headerStyle.setFillPattern(FillPatternType.BIG_SPOTS);
+  //          headerStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(232, 82, 82)).getIndex());
+  //          headerStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
+
             Row row = sheet.createRow(rowInd);
-            Cell cell = row.createCell(0);
+            Cell cell = row.createCell(1);
             cell.setCellValue("Коммерческое предложение");
-            cell.setCellStyle(style);
+            cell.setCellStyle(titleHeader);
 
             rowInd++;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(0);
+            cell = row.createCell(1);
             cell.setCellValue("Клиент:");
-            cell.setCellStyle(style);
-            cell = row.createCell(1);
+            cell.setCellStyle(mainHeaderStyle);
+            cell = row.createCell(2);
             cell.setCellValue(newCP.getClient());
-            cell.setCellStyle(style);
+            cell.setCellStyle(mainHeaderStyle);
 
             rowInd++;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(0);
-            cell.setCellValue("Бренд:");
-            cell.setCellStyle(style);
             cell = row.createCell(1);
+            cell.setCellValue("Бренд:");
+            cell.setCellStyle(mainHeaderStyle);
+            cell = row.createCell(2);
             cell.setCellValue(newCP.getBrand());
-            cell.setCellStyle(style);
+            cell.setCellStyle(mainHeaderStyle);
 
             rowInd ++;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(0);
+            cell = row.createCell(1);
             cell.setCellValue("Период:");
-            cell.setCellStyle(style);
-            cell = row.createCell(1);
+            cell.setCellStyle(mainHeaderStyle);
+            cell = row.createCell(2);
             cell.setCellValue(newCP.getDate_from() + "-" + newCP.getDate_to());
-            cell.setCellStyle(style);
+            cell.setCellStyle(mainHeaderStyle);
 
             rowInd++;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(0);
+            cell = row.createCell(1);
             cell.setCellValue("Дата создания:");
-            cell.setCellStyle(style);
-            cell = row.createCell(1);
+            cell.setCellStyle(mainHeaderStyle);
+            cell = row.createCell(2);
             cell.setCellValue(String.valueOf(newCP.getCreating_date()));
-            cell.setCellStyle(style);
+            cell.setCellStyle(mainHeaderStyle);
 
             rowInd++;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(0);
-            cell.setCellValue("Формат:");
-            cell.setCellStyle(style);
             cell = row.createCell(1);
+            cell.setCellValue("Формат:");
+            cell.setCellStyle(mainHeaderStyle);
+            cell = row.createCell(2);
             cell.setCellValue(newCP.getPlacing_format());
-            cell.setCellStyle(style);
+            cell.setCellStyle(mainHeaderStyle);
 
             rowInd += 2;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(8);
+            cell = row.createCell(9);
             cell.setCellValue("Медиапоказатели за 1 месяц");
-            cell.setCellStyle(style);
-            sheet.addMergedRegion(CellRangeAddress.valueOf("I13:L13"));
+            cell.setCellStyle(headerStyle);
+            sheet.addMergedRegion(CellRangeAddress.valueOf("J13:M13"));
 
             rowInd++;
             row = sheet.createRow(rowInd);
 
-            fillEstimateRow(style, row, "Регион", "Количество рекламных поверхностей, шт.","Стоимость размещения 1 рекламного носителя за 1 месяц, руб., без НДС",
+            fillEstimateRow(headerStyle, row, "Регион", "Количество рекламных поверхностей, шт.","Стоимость размещения 1 рекламного носителя за 1 месяц, руб., без НДС",
                     "Длительность размещения (мес.)","Скидка, объём + период", "Стратегическая скидка",
                     "Стоимость размещения 1 рекламного носителя за 1 месяц после скидок, руб., без НДС","Итого, бюджет, руб., без НДС",
                     "Трафик (посещения)", "OTS (контакты)", "Охват (люди)", "CPT (руб.)");
@@ -200,48 +281,135 @@ public class CommercialProposalService {
             rowInd++;
             row = sheet.createRow(rowInd);
 
-            fillEstimateRow(style, row, "Итого", String.valueOf(newCP.getAo_count_comm()), "", "", "", "", "", String.valueOf(newCP.getPrice_comm()),
+            fillEstimateRow(headerStyle, row, "Итого", String.valueOf(newCP.getAo_count_comm()), "", "", "", "", "", String.valueOf(newCP.getPrice_comm()),
                     String.valueOf(newCP.getTraffic_comm()), String.valueOf(newCP.getOts_comm()), String.valueOf(newCP.getCoverage_comm()), String.valueOf(newCP.getCpt_comm()));
 
-            rowInd += 2;
+            rowInd ++;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(6);
+            sheet.addMergedRegion(new CellRangeAddress(rowInd, rowInd, 1, 7));
+            cell = row.createCell(1);
             cell.setCellValue("Итого, размещение");
-            cell.setCellStyle(style);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(2);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(3);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(4);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(5);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(6);
+            cell.setCellStyle(footerStyle);
             cell = row.createCell(7);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(8);
             cell.setCellValue(newCP.getPlacement_fin());
             cell.setCellStyle(style);
 
             rowInd ++;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(6);
+            sheet.addMergedRegion(new CellRangeAddress(rowInd, rowInd, 1, 7));
+            cell = row.createCell(1);
             cell.setCellValue("Производство плакатов В1");
-            cell.setCellStyle(style);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(2);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(3);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(4);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(5);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(6);
+            cell.setCellStyle(footerStyle);
             cell = row.createCell(7);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(8);
             cell.setCellValue(newCP.getB1_price());
             cell.setCellStyle(style);
 
             rowInd ++;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(6);
+            sheet.addMergedRegion(new CellRangeAddress(rowInd, rowInd, 1, 7));
+            cell = row.createCell(1);
             cell.setCellValue("Общий бюджет, размещение + производство, без НДС");
-            cell.setCellStyle(style);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(2);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(3);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(4);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(5);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(6);
+            cell.setCellStyle(footerStyle);
             cell = row.createCell(7);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(8);
             cell.setCellValue(newCP.getPrice_fin());
             cell.setCellStyle(style);
 
             rowInd ++;
             row = sheet.createRow(rowInd);
-            cell = row.createCell(6);
+            sheet.addMergedRegion(new CellRangeAddress(rowInd, rowInd, 1, 7));
+            cell = row.createCell(1);
             cell.setCellValue("Общий бюджет, размещение + производство, с учётом НДС");
-            cell.setCellStyle(style);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(2);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(3);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(4);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(5);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(6);
+            cell.setCellStyle(footerStyle);
             cell = row.createCell(7);
+            cell.setCellStyle(footerStyle);
+            cell = row.createCell(8);
             cell.setCellValue(newCP.getPrice_vat_fin());
             cell.setCellStyle(style);
 
+            rowInd += 2;
+            row = sheet.createRow(rowInd);
+            cell = row.createCell(1);
+            cell.setCellValue("* Стоимость включает аренду одной панели формата B1, логистику, монтаж, демонтаж, ежемесячный фотоотчет 100%");
+            cell.setCellStyle(mainHeaderStyle);
+
+            rowInd++;
+            row = sheet.createRow(rowInd);
+            cell = row.createCell(1);
+            cell.setCellValue("Dead line по рекламной кампании:");
+            cell.setCellStyle(mainHeaderStyle);
+
+            rowInd++;
+            row = sheet.createRow(rowInd);
+            cell = row.createCell(1);
+            cell.setCellValue("1. Подтверждение проекта - не позднее чем за 40 календарных дней до старта кампании");
+            cell.setCellStyle(mainHeaderStyle);
+
+            rowInd++;
+            row = sheet.createRow(rowInd);
+            cell = row.createCell(1);
+            cell.setCellValue("2. Предоставление финального макета - за 30 календарных дней до старта кампании");
+            cell.setCellStyle(mainHeaderStyle);
+
+            rowInd++;
+            row = sheet.createRow(rowInd);
+            cell = row.createCell(1);
+            cell.setCellValue("3. Окончательная адресная программа предоставляется только после согласования макета с клиниками");
+            cell.setCellStyle(mainHeaderStyle);
+
+            rowInd++;
+            row = sheet.createRow(rowInd);
+            cell = row.createCell(1);
+            cell.setCellValue("4. Предоставление готовых материалов - за 20 календарных дней, в случае их производства третьей стороной");
+            cell.setCellStyle(mainHeaderStyle);
 
             Sheet sheet_ao = workbook.createSheet("Адресная программа");
-            sheet_ao.setColumnWidth(0, 600);
+            sheet_ao.setColumnWidth(0, 1500);
             sheet_ao.setColumnWidth(1, 6000);
             sheet_ao.setColumnWidth(2, 6000);
             sheet_ao.setColumnWidth(3, 6000);
@@ -250,15 +418,13 @@ public class CommercialProposalService {
             sheet_ao.setColumnWidth(6, 6000);
             sheet_ao.setColumnWidth(7, 6000);
             sheet_ao.setColumnWidth(8, 6000);
-            sheet_ao.setColumnWidth(9, 6000);
-            sheet_ao.setColumnWidth(10, 6000);
-            sheet_ao.setColumnWidth(11, 6000);
+
+            sheet_ao.setDisplayGridlines(false);
 
             rowInd = 0;
             row = sheet_ao.createRow(rowInd);
 
-            fillEstimateRow(style, row, "№ П/П", "Город / City", "Объект / Policlinic", "Фактический адрес / Address", "Этаж / Floor", "Сегмент", "Тип ЛПУ / Policlinic type", "Социальная значимость ЛПУ / Policlinic status",
-                    "","", "", "");
+            fillAORow(headerStyle, row, "№ П/П", "Город / City", "Объект / Policlinic", "Фактический адрес / Address", "Этаж / Floor", "Сегмент", "Тип ЛПУ / Policlinic type", "Социальная значимость ЛПУ / Policlinic status");
 
             int i = 1;
 
@@ -266,9 +432,9 @@ public class CommercialProposalService {
                 rowInd++;
                 row = sheet_ao.createRow(rowInd);
                 AdvertisingObjectEntity advertisingObjectEntity = advertisingObjectRep.getOne(o);
-                fillEstimateRow(style, row, String.valueOf(i), advertisingObjectEntity.getCity().getCity(), advertisingObjectEntity.getName(), advertisingObjectEntity.getAddress(),
+                fillAORow(style, row, String.valueOf(i), advertisingObjectEntity.getCity().getCity(), advertisingObjectEntity.getName(), advertisingObjectEntity.getAddress(),
                         String.valueOf(advertisingObjectEntity.getFloor()), advertisingObjectEntity.getSegment().getSegment(), advertisingObjectEntity.getMi_type().getType(),
-                        advertisingObjectEntity.getMi().getSignificance(), "","","","");
+                        advertisingObjectEntity.getMi().getSignificance());
                 i++;
             }
 
@@ -286,7 +452,48 @@ public class CommercialProposalService {
         }
     }
 
+
+
     private void fillEstimateRow(CellStyle style, Row row, String cell0, String cell1, String cell2, String cell3, String cell4, String cell5, String cell6, String cell7, String cell8, String cell9, String cell10, String cell11) {
+        Cell cell = row.createCell(1);
+        cell.setCellValue(cell0);
+        cell.setCellStyle(style);
+        cell = row.createCell(2);
+        cell.setCellValue(cell1);
+        cell.setCellStyle(style);
+        cell = row.createCell(3);
+        cell.setCellValue(cell2);
+        cell.setCellStyle(style);
+        cell = row.createCell(4);
+        cell.setCellValue(cell3);
+        cell.setCellStyle(style);
+        cell = row.createCell(5);
+        cell.setCellValue(cell4);
+        cell.setCellStyle(style);
+        cell = row.createCell(6);
+        cell.setCellValue(cell5);
+        cell.setCellStyle(style);
+        cell = row.createCell(7);
+        cell.setCellValue(cell6);
+        cell.setCellStyle(style);
+        cell = row.createCell(8);
+        cell.setCellValue(cell7);
+        cell.setCellStyle(style);
+        cell = row.createCell(9);
+        cell.setCellValue(cell8);
+        cell.setCellStyle(style);
+        cell = row.createCell(10);
+        cell.setCellValue(cell9);
+        cell.setCellStyle(style);
+        cell = row.createCell(11);
+        cell.setCellValue(cell10);
+        cell.setCellStyle(style);
+        cell = row.createCell(12);
+        cell.setCellValue(cell11);
+        cell.setCellStyle(style);
+    }
+
+    private void fillAORow(CellStyle style, Row row, String cell0, String cell1, String cell2, String cell3, String cell4, String cell5, String cell6, String cell7) {
         Cell cell = row.createCell(0);
         cell.setCellValue(cell0);
         cell.setCellStyle(style);
@@ -310,18 +517,6 @@ public class CommercialProposalService {
         cell.setCellStyle(style);
         cell = row.createCell(7);
         cell.setCellValue(cell7);
-        cell.setCellStyle(style);
-        cell = row.createCell(8);
-        cell.setCellValue(cell8);
-        cell.setCellStyle(style);
-        cell = row.createCell(9);
-        cell.setCellValue(cell9);
-        cell.setCellStyle(style);
-        cell = row.createCell(10);
-        cell.setCellValue(cell10);
-        cell.setCellStyle(style);
-        cell = row.createCell(11);
-        cell.setCellValue(cell11);
         cell.setCellStyle(style);
     }
 
