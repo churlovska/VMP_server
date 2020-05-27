@@ -6,6 +6,7 @@ import com.vmp.server.repositories.*;
 import com.vmp.server.response.MessageResponse;
 import com.vmp.server.response.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,16 +41,22 @@ public class VMPUserController {
         return vmpUserRep.findByOrderByLastnameAscFirstnameAscLoginAsc();
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/user/{id}/{curr_id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id, @PathVariable Integer curr_id) {
 
+        if(id.equals(curr_id)) {
+            return new ResponseEntity<>("You can not delete current user", HttpStatus.BAD_REQUEST);
+        }
         try {
             if (vmpUserRep.existsById(id)) {
                 vmpUserRep.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.OK);
             }
+            return new ResponseEntity<>("User is not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

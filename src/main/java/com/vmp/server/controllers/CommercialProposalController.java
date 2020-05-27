@@ -77,14 +77,20 @@ public class CommercialProposalController {
 
     @PostMapping(path = "/cp_count/{b1_price}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<EstimateCountResponse> countCP(@RequestBody ArrayList<EstimateResponse> estimateResponses,
+    public ResponseEntity<?> countCP(@RequestBody ArrayList<EstimateResponse> estimateResponses,
                                                          @PathVariable Double b1_price) {
 
-        Double discount;
-        for (EstimateResponse o: estimateResponses) {
-            discount = Double.parseDouble(o.getDiscount().substring(0, o.getDiscount().indexOf('%')))/100.0;
-            o.setDiscount_price(o.getPrice()*discount*(1-o.getStrategic_discount()/100.0));
-            o.setFinal_price(o.getDiscount_price()*o.getAo_count()*o.getDuration());
+        try {
+            Double discount;
+            for (EstimateResponse o : estimateResponses) {
+                discount = Double.parseDouble(o.getDiscount().substring(0, o.getDiscount().indexOf('%'))) / 100.0;
+                o.setDiscount_price(o.getPrice() * discount * (1 - o.getStrategic_discount() / 100.0));
+                o.setFinal_price(o.getDiscount_price() * o.getAo_count() * o.getDuration());
+            }
+        }
+        catch(NumberFormatException ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>("Wrong discount format", HttpStatus.BAD_REQUEST);
         }
 
         int ao_count_comm = 0;

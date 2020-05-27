@@ -1,9 +1,6 @@
 package com.vmp.server.service;
 
-import com.vmp.server.entities.AdvertisingObjectEntity;
-import com.vmp.server.entities.CommercialProposalEntity;
-import com.vmp.server.entities.EstimateEntity;
-import com.vmp.server.entities.PreparedCommercialProposalEntity;
+import com.vmp.server.entities.*;
 import com.vmp.server.repositories.*;
 import com.vmp.server.response.AOListResponse;
 import com.vmp.server.response.CPRequest;
@@ -451,8 +448,6 @@ public class CommercialProposalService {
             return null;
         }
     }
-
-
 
     private void fillEstimateRow(CellStyle style, Row row, String cell0, String cell1, String cell2, String cell3, String cell4, String cell5, String cell6, String cell7, String cell8, String cell9, String cell10, String cell11) {
         Cell cell = row.createCell(1);
