@@ -112,7 +112,7 @@ public class CommercialProposalService {
             sheet.setColumnWidth(10, 4100);
             sheet.setColumnWidth(11, 4100);
 
-            InputStream inputStream = new FileInputStream("d:\\TMP\\title.png");
+            InputStream inputStream = new FileInputStream("src/main/resources/static/title.png");
             byte[] bytes = IOUtils.toByteArray(inputStream);
             int pictureIdx = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
             inputStream.close();
