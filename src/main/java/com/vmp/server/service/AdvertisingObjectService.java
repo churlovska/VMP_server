@@ -81,6 +81,7 @@ public class AdvertisingObjectService {
 
             Path path = Paths
                     .get(uploadDir + File.separator + StringUtils.cleanPath(cal.getTimeInMillis() + file.getOriginalFilename()));
+            Files.createFile(path);
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
             ao.setPhoto(String.valueOf(path));
