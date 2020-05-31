@@ -33,7 +33,7 @@ public class AdvertisingObjectService {
     @Autowired
     AOTypesRep aoTypesRep;
 
-    public String uploadDir = "D:\\TMP\\images\\";
+    public String uploadDir = "\\data\\vitam\\img\\";
 
     @Transactional
     public Integer createAO(int id, AOResponse newAO) {

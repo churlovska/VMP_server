@@ -81,7 +81,6 @@ public class AuthController {
                     .body(new MessageResponse("Этот логин уже занят!"));
         }
 
-        // Create new user's account
         VMPUserEntity user = new VMPUserEntity(signUpRequest.getLogin(),
                 encoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getLastName(),

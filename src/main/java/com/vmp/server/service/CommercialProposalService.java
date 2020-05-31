@@ -126,7 +126,7 @@ public class CommercialProposalService {
             anchor.setRow1(0);
 
             Picture pict = drawing.createPicture(anchor, pictureIdx);
-            pict.resize(); //don't do that. Let the anchor resize the image!
+            pict.resize();
 
             XSSFFont font = ((XSSFWorkbook) workbook).createFont();
             font.setFontName("Verdana");
@@ -196,7 +196,7 @@ public class CommercialProposalService {
 
 
   //          ((XSSFCellStyle)footerStyle).setFillBackgroundColor(new XSSFColor(new java.awt.Color(232, 82, 82)));
- //           headerStyle.setFillPattern(FillPatternType.BIG_SPOTS);
+  //          headerStyle.setFillPattern(FillPatternType.BIG_SPOTS);
   //          headerStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(232, 82, 82)).getIndex());
   //          headerStyle.setFillForegroundColor(IndexedColors.DARK_RED.getIndex());
 
@@ -435,7 +435,7 @@ public class CommercialProposalService {
                 i++;
             }
 
-            String fileLocation = "d:\\TMP\\" + newCP.getName() + ".xlsx";
+            String fileLocation = "\\data\\vitam\\reports\\" + newCP.getName() + ".xlsx";
 
             FileOutputStream outputStream = new FileOutputStream(fileLocation);
             workbook.write(outputStream);
